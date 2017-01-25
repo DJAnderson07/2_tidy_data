@@ -1,0 +1,863 @@
+---
+title       : An introduction to tidy data and the tidyverse
+subtitle    : 
+author      : Daniel Anderson
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+--- 
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+
+```{r setup, include = FALSE}
+library(knitr)
+opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/tidyverse_course/")
+library(stringr)
+```
+
+## Agenda
+* Introduce the tidyverse
+* Introduce the concept of tidy data
+* Tidy a simple dataset together
+* Discuss why tidy data are useful (particularly when used within the tidyverse)
+* Overview packages in the tidyverse
+
+---- &twocol
+## tidyverse (briefly)
+
+*** =right
+![had](assets/img/had.png)
+
+*** =left
+
+* Collection of packages written primarily by Hadley Wickham. 
+* All built around a common philosophy 
+* *tidy* is actually a technical term for a specific data format
+* Today will be focused around the tidyverse as an efficient way for you to "break in" to R
+
+----
+## tidyverse packages 
+
+The primary packages included in the tidyverse include:
+
+* *ggplot2* for data visualization
+* *dplyr* for data manipulation
+* *tidyr* for getting data in a tidy format (in the technical sense)
+* *readr* for importing data
+* *purrr* for functional programming
+* *tibble* for working with a different kind of data frame, called a tibble
+
+---- &twocol
+## Other tidyverse packages
+
+*** =left
+
+* *hms* for time data
+* *stringr* for string data
+* *lubridate* for date/time data
+* *forcats* for factors
+* *DBI* for databases
+* *haven* for SPSS, SAS and Stata files
+
+*** =right
+
+* *httr* for web apis
+* *jsonlite* for JSON
+* *readxl* for Excel files
+* *rvest* for web scraping
+* *xml2* for XML
+* *modelr* for simple modeling
+* *broom* for transforming model results into tidy data
+
+----
+## `tidyr` and `dplyr`
+Two packages we will use most today
+* `tidyr`: Helps you get your data into a tidy format
+* `dplyr`: Helps you manipulate your data (create, remove, summarize, etc. )
+
+----
+## Getting started
+
+* Install once with `install.packages()`
+* Load each time with `library()`
+
+```{r install_tidyverse, eval = FALSE}
+# Install once
+install.packages("tidyverse")
+
+# Load each time
+library(tidyverse)
+```
+```{r load_tidyverse_no_echo, echo = FALSE, message = FALSE}
+library(tidyverse)
+```
+
+----
+## Important qualifications
+Everything that can be done through the tidyverse can be done through base R. 
+  (and some things can even be done multiple ways through the tidyverse and base R)
+
+We'll focus on the tidyverse because it's a good way to "break in" to R.
+
+Later, you can go deeper on your own (or perhaps through another course) to 
+  learn more about base R.
+
+*I know base R better than the tidyverse: I'm learning the tidyverse with you*
+
+----
+## Why tidyverse?
+* Verbs
+* Efficiency
+* More intuitive when getting first learning R
+
+<br>
+
+We will learn some base R - it is unavoidable. A *huge* part of learning R is learning how to not only search for answers when you're having problems, but also to understand the answers provided! In many cases, this requires understanding at least some base R.
+
+---- &twocol
+## Philosophy of the tidyverse
+
+*** =left
+![stack-1](assets/img/stack-1.jpeg)
+![stack-2](assets/img/stack-2.jpg)
+
+*** =right
+![pit](assets/img/pit.jpeg)
+
+
+--- bg:Lavender &twocol
+
+## Tidy data
+
+*** =left
+
+<div align = "right">
+<img src = assets/img/tidy_up.png width = 600 height = 200>
+</div>
+
+<div align = "left">
+<img src = assets/img/tidy_data.png width = 600 height = 200>
+</div>
+
+*** =right
+
+<div align = "center">
+<img src = assets/img/tidy_up2.jpeg width = 300 height = 300>
+</div>
+
+----- .quote
+<q> It is often said that 80% of data analysis is spent on the process of cleaning and preparing the data.
+
+---- &twocol
+*** =left
+
+* Persistent and varied challenge
+* Little research on how to do it well
+	+ Enter Hadley Wickham
+
+*** =right
+
+<div align = "center">
+<img src = assets/img/hadley_jss.png width = 500 height = 750>
+</div>
+
+---- 
+## Tidy data
+
+# Definition
+1. Each variable is a column
+2. Each observation is a row
+3. Each type of observational unit forms a table
+
+<div align = "left">
+<img src = assets/img/tidy_data.png width = 1000 height = 350>
+</div>
+
+
+----
+## Common ways rectangular datasets are "messy"
+(We won't get into multiple data files and how they interact, i.e., relational databases)
+* Column headers are values, not variable names
+* Multiple variables stored in one column
+* Variables are stored in both rows and columns
+
+
+----
+## An example with SEDA data
+
+Any ideas why this is messy? (keep in mind, this dataset includes "long" in the file name)
+
+```{r seda_messy1, echo = FALSE}
+messy <- read_csv("./course_materials/data/district means national-referenced by year grade subject (long file).csv")
+kable(head(messy), digits = 2)
+```
+
+----
+The offending columns
+
+<br>
+
+```{r seda_messy2, echo = FALSE}
+kable(head(messy[ ,7:10]), digits = 2)
+```
+Problem? The column headers are values, not variables. 
+
+----
+## Tidied version
+
+```{r seda_tidy, echo = FALSE}
+tidied <- messy %>% 
+  gather(mean_link_ela:se_link_math, 
+    key = "key",
+    value = "Score") %>% 
+  separate(key, c("Variable", "Discard", "Subject"), sep = "_") %>% 
+  spread(Variable, Score) %>% 
+  select(-Discard)
+
+kable(head(tidied))
+```
+
+----
+## Other examples
+(from the JSS paper)
+
+```{r religion_no_show, echo = FALSE, warning = FALSE, message = FALSE}
+#### Note: Code below is Hadley's 
+####   (see https://github.com/hadley/tidy-data/blob/master/data/pew.r)
+pew <- foreign::read.spss("./2_tidy_data/assets/data/pew.sav")
+pew <- as.data.frame(pew)
+
+religion <- pew[c("q16", "reltrad", "income")]
+religion$reltrad <- as.character(religion$reltrad)
+religion$reltrad <- str_replace(religion$reltrad, " Churches", "")
+religion$reltrad <- str_replace(religion$reltrad, " Protestant", " Prot")
+religion$reltrad[religion$q16 == " Atheist (do not believe in God) "] <- "Atheist"
+religion$reltrad[religion$q16 == " Agnostic (not sure if there is a God) "] <- "Agnostic"
+religion$reltrad <- str_trim(religion$reltrad)
+religion$reltrad <- str_replace_all(religion$reltrad, " \\(.*?\\)", "")
+
+religion$income <- c("Less than $10,000" = "<$10k", 
+  "10 to under $20,000" = "$10-20k", 
+  "20 to under $30,000" = "$20-30k", 
+  "30 to under $40,000" = "$30-40k", 
+  "40 to under $50,000" = "$40-50k", 
+  "50 to under $75,000" = "$50-75k",
+  "75 to under $100,000" = "$75-100k", 
+  "100 to under $150,000" = "$100-150k", 
+  "$150,000 or more" = ">150k", 
+  "Don't know/Refused (VOL)" = "Don't know/refused")[religion$income]
+
+religion$income <- factor(religion$income, levels = c("<$10k", "$10-20k", "$20-30k", "$30-40k", "$40-50k", "$50-75k", 
+  "$75-100k", "$100-150k", ">150k", "Don't know/refused"))
+counts <- plyr::count(religion, c("reltrad", "income"))
+names(counts)[1] <- "religion"
+
+raw <- reshape2::dcast(counts, religion ~ income)
+kable(raw)
+```
+
+----
+## The tidied version
+
+```{r tidy_religion, echo = FALSE}
+kable(counts[1:12, ])
+```
+
+----
+## Yet another example
+
+```{r echo = FALSE, results = "asis"}
+## Hadley's code, again
+raw <- read_csv("./2_tidy_data/assets/data/tb.csv")
+raw$new_sp <- NULL
+raw <- subset(raw, year == 2000)
+names(raw)[1] <- "country"
+
+names(raw) <- str_replace(names(raw), "new_sp_", "")
+raw$m04 <- NULL
+raw$m514 <- NULL
+raw$f04 <- NULL
+raw$f514 <- NULL
+###
+
+country_raw <- kable(raw[1:10, c(1:7, 10:15)])
+cat(gsub('\\bNA\\b', '  ', country_raw), sep='\n')
+```
+
+In this example, *M* indicates if the data came from a male, while *F* indicates female. The subsequent numbers represent the age range. Tidying these data will be a two step process.
+
+----
+## Step one
+
+```{r step_one, echo = FALSE}
+partial <- raw %>%
+  select(-mu, -fu) %>%  
+  gather(variable, cases, -country:-year) 
+kable(partial[1:10, ])
+```
+Notice this is much closer to what we want, but we have a problem now in that we have **two variables stored in one column**.
+
+----
+## Step two: Tidied data
+
+```{r step_two, echo = FALSE}
+tidied2 <- partial %>% 
+  separate(variable, c("sex", "age_range"), 1) %>% 
+  mutate(age_range = recode(age_range, 
+                    "014" = "0-14", "1524" = "15-24", "2534" = "25-34",
+                    "3544" = "35-44", "4554" = "45-54", "5564" = "55-64",
+                    "65" = "65+")) %>% 
+  arrange(country) %>% 
+  na.omit()
+kable(tidied2[1:10, ])
+```
+
+----
+## Variables as rows and columns
+
+```{r weather_raw, echo = FALSE, results = "asis"}
+##### code written by Hadley
+options(stringsAsFactors = FALSE)
+source("./2_tidy_data/assets/data/read-fwf.r")
+
+# Define format for fixed width file
+cols <- data.frame(
+  name =  c("id", "year", "month", "element"),
+  start = c(1,     12,    16,      18),
+  end =   c(11,    15,    17,      21))
+
+names <- str_c(c("value", "mflag", "qflag", "sflag"), rep(1:31, each = 4), sep = "_")
+starts <- cumsum(c(22, rep(c(5, 1, 1, 1), 31)))
+starts <- starts[-length(starts)]
+ends <- c(starts[-1], starts[length(starts)] + 1) - 1
+
+values <- data.frame(name = names, start = starts, end = ends)
+cols <- rbind(cols, values)
+
+# Load data and subset to small example
+raw <- read.fwf2("./2_tidy_data/assets/data/weather.txt",  cols)
+raw <- subset(raw, year == 2010 & element %in% c("TMIN", "TMAX")) 
+raw <- raw[, c(1:4, which(str_detect(names(raw), "value")))]
+raw$id <- str_c(str_sub(raw$id, 1, 2), 
+              str_sub(raw$id, -5, -1))
+
+names(raw)[-(1:4)] <- str_c("d", 1:31)
+raw[raw == -9999] <- NA
+raw[-(1:4)] <- raw[-(1:4)] / 10 
+rownames(raw) <- NULL
+raw$element <- tolower(raw$element)
+####
+
+weather_raw <- kable(raw[1:10, 1:12])
+cat(gsub('\\bNA\\b', '  ', weather_raw), sep='\n')
+```
+
+---- &twocol
+## Two Steps
+
+```{r tidied_weather, echo = FALSE}
+molten_weather <- raw %>% 
+  as_data_frame() %>% 
+  gather(day_key, value, d1:d31) %>% 
+  na.omit()
+
+tidied_weather <- raw %>% 
+  as_data_frame() %>% 
+  gather(day_key, value, d1:d31) %>% 
+  spread(element, value) %>% 
+  separate(day_key, c("discard", "day"), 1, convert = TRUE) %>% 
+  mutate(month = str_pad(month, 2, "left", 0),
+         day = str_pad(month, 2, "left", 0)) %>% 
+  unite(date, year, month, day, sep = "-") %>% 
+  select(-discard) %>% 
+  arrange(id) %>% 
+  na.omit()
+```
+
+*** =left
+# Step 1
+```{r print_molten_weather, echo = FALSE}
+kable(molten_weather[1:10, ])
+```
+
+*** =right
+# Step 2
+```{r print_tidied_weather, echo = FALSE}
+kable(tidied_weather[1:10, ])
+```
+
+----
+## A caveat
+* There are many reasons why you might want to have messy data. However, tidy data is an extremely useful format generally, and particularly useful when applying tools within the *tidyverse*. 
+
+* All packages within the tidyverse are designed to either help you get your data in a tidy format, or assume your data are already in a tidy format.
+
+* Assuming a common data format leads to large jumps in efficiency, as the output from certain functions can be directly input into others.
+
+----
+## The tidyverse data analysis philosophy
+
+<div align = "left">
+<img src = assets/img/data-science.png width = 1000 height = 400>
+</div>
+
+
+----
+## Why tidy data?
+
+* When you put your data in a tidy format they are "ready to go" for essentially all the packages in the tidyverse. Let's look at some example item-level data.
+
+* First, let's tidy some data together, as a group. Then, I'll demonstrate why this format can be so helpful within the tidyverse
+
+----
+## Load the data
+
+Because we're working through the *tidyverse*, we'll use the *readr* package and the `read_csv` function, rather than `base::read.csv`. These functions differ in the following ways:
+
+<div align = "left">
+<img src = assets/img/read_csv.png width = 1000 height = 300>
+</div>
+
+
+---- .segue
+# Load data with RStudio demo
+
+----
+## Other ways to load data
+
+```{r old_dir, include = FALSE}
+old_dir <- getwd()
+```
+
+```{r load_data}
+setwd("/Users/Daniel/Dropbox/Teaching/tidyverse_course/2_tidy_data/data/")
+library(readr)
+d <- read_csv("exam1.csv")
+knitr::kable(head(d))
+```
+
+```{r reset_dir, include = FALSE}
+setwd(old_dir)
+```
+
+----
+## Pop Quiz Time
+* Are these data tidy?
+* If not, what needs to happen to make them tidy?
+* What are the variables? What are the values?
+
+----
+## Verbs: `tidyr`
+* `gather()`
+* `spread()`
+* `separate()` and `extract()`
+* `unite()`
+* `nest()`
+
+What do you think each do?
+
+----
+## Quick aside: `%>%`
+The "pipe" operator takes the output from one function and feeds it into the 
+next. For example:
+
+```{r pipe_1}
+d$gender %>% table()
+d %>% str()
+```
+
+----
+## Step 1: `gather` the item variables
+* Change all item variables into two variables: `item` and `score`
+
+<br>
+
+![gather](assets/img/gather.png)
+
+----
+Try running the following code
+
+```{r gather_exam1, eval = FALSE}
+d %>% 
+  gather(key = item, value = score, -1:-2) 
+```
+* Note that in the above code, we omit the `data` argument, because it's being "piped" in.
+* Third argument to `...` says we want to omit the first and second columns in when gathering.
+
+<br>
+
+What do you get? Are these data tidy now?
+
+---
+* The code on the previous slide basically puts our data in a tidy format. 
+
+**BUT**
+
+* We didn't store the result in an object (try printing `d` now)
+* Need to store the tidy data in a new object (or reassign `d`)
+* To "clean up" some, could transform the `item` variable to numeric
+
+----
+## Finish tidying the data
+
+```{r full_tidy_exam1}
+td <- d %>% 
+  gather(item, score, -1:-2) %>% 
+  mutate(item = parse_number(item))
+```
+* `parse_number()` comes from the *readr* package.
+* To see the data you'll need to print `td` (or whatever you reassigned it as) to the console.
+
+```{r print_tidy_data, echo = FALSE}
+knitr::kable(head(td)) 
+```
+
+----
+## An alternative
+(please run this code, following the explanation)
+
+```{r full_tidy_exam2}
+td <- d %>% 
+  gather(item, score, -1:-2) %>% 
+  separate(item, c("discard", "item"), sep = "_") %>% 
+  select(-discard)
+```
+
+----
+## Why are tidy data useful?
+* When used in conjunction with `dplyr`, tidy data can result in large gains in efficiency.
+
+For example, suppose we want to calculate the proportion of students responding correctly to each item.
+
+```{r prop_correct_echo1, eval = FALSE}
+td %>% 
+  group_by(item) %>% 
+  summarize(prop = mean(score))
+```
+
+----
+```{r prop_correct_eval, echo = FALSE}
+td %>% 
+  group_by(item) %>% 
+  summarize(prop = mean(score))
+```
+
+----
+What if we also wanted to know the standard deviation?
+
+```{r prop_correct_sd}
+td %>% 
+  group_by(item) %>% 
+  summarize(prop = mean(score),
+            sd = sd(score))
+```
+----
+What if we wanted to know the proportion correct for each item by gender?
+
+```{r prop_correct_by_gender}
+td %>% 
+  group_by(item, gender) %>% 
+  summarize(prop = mean(score))
+```
+
+----
+## Verbs: *dplyr* 
+
+* `group_by()`
+* `filter()` and `slice()`
+* `arrange()`
+* `select()` and `rename()`
+* `distinct()`
+* `mutate()` and `transmutate()`
+* `summarize()` (or `summarise()`)
+* `sample_n()` and `sample_frac()`
+
+What do you think each of the above do?
+
+* Good overview of `dplyr` [here](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html).
+
+----
+We can take the previous example further, by piping the output into a plot
+
+```{r prop_correct_by_gender_plot, fig.width = 13, fig.height = 5}  
+td %>% 
+  group_by(item, gender) %>% 
+  summarize(prop = mean(score)) %>% 
+  mutate(gender = as.factor(gender)) %>% 
+  ggplot(aes(x = item, y = prop, color = gender)) +
+  geom_point() +
+  geom_line(aes(group = item))
+```
+
+----
+But, probably better (clearer) to do it in two steps. 
+<br>
+
+First produce the data
+
+```{r prop_correct_by_gender_plot_data}
+pd <- td %>% 
+  group_by(item, gender) %>% 
+  summarize(prop = mean(score)) %>% 
+  mutate(gender = as.factor(gender))
+```
+Then produce the plot
+
+```{r prop_correct_by_gender_plot2, eval = FALSE}
+ggplot(pd, aes(x = item, y = prop, color = gender)) +
+  geom_point() +
+  geom_line(aes(group = item))
+```
+
+----
+## Note on plotting
+The entire next lecture will be on plotting. We're discussing tidy data now because it's a great format for plotting with *ggplot2*. 
+
+----
+## Challenge (work by yourself or with a neighbor)
+Remember, the following code calculates the mean score for each item. 
+
+```{r prop_correct_echo2, eval = FALSE}
+td %>% 
+  group_by(item) %>% 
+  summarize(prop = mean(score))
+```
+
+Try to modify the above code to produce raw scores for every student. If you're successful, try thinking about how you could calculate the average raw score by gender.
+
+----
+## Calculate Raw Scores
+Modify the prior to:
+* `group_by` student name
+* `sum` score (rather than average it with `mean`)
+
+```{r raw_scores}
+td %>% 
+  group_by(stu_name) %>% 
+  summarize(raw_score = sum(score))
+```
+
+----
+## Raw Scores by Gender
+* `group_by` name and gender (so gender is in the summary)
+* calculate raw scores
+* redefine `group_by` to gender alone
+* calculate mean
+
+```{r raw_scores_by_gender}
+td %>% 
+  group_by(stu_name, gender) %>% 
+  summarize(raw_score = sum(score)) %>% 
+  group_by(gender) %>% 
+  summarize(means = mean(raw_score))
+```
+
+----
+## Point-biserial correlation
+The point-biserial correlation represents the correlation between an item response (0/1) and the total score. It represents an index of item discrimination, because generally students' responding correctly should have higher raw scores than students responding incorrectly.
+
+<br>
+To calculate point biserial correlations, we need to 
+* merge the raw scores into the raw data
+* calculate the correlation between the item *score* and *raw_score* for each item
+
+----
+## Calculate raw scores and merge
+
+Raw score calculation
+
+```{r raw_calc}
+raw <- td %>% 
+  group_by(stu_name) %>% 
+  summarize(raw_score = sum(score))
+```
+
+Merge with `td`
+
+```{r merge}
+td <- left_join(td, raw)
+```
+
+----
+```{r filter_barbara}
+filter(td, stu_name == "Barbara")
+
+```
+
+
+---
+## Calculate Point-Biserials
+(note, you get some warnings here about no variance)
+```{r pt_biserials, warning = FALSE}
+td %>% 
+  group_by(item) %>% 
+  summarize(pt_biserial = cor(score, raw_score))
+```
+
+---
+## Spreading the data back out
+
+Tidy data is great when conducting preliminary descriptives and for plotting the data. But if you're using other packages for analysis, it may need to be in a different format. 
+
+![spread](assets/img/spread.png)
+
+----
+## Spread *td*
+
+```{r spread_td}
+s_d <- td %>% 
+  spread(item, score)
+```
+(print object to see data)
+
+```{r print_spread_data, echo = FALSE}
+knitr::kable(head(s_d))
+```
+
+----
+## Fit model
+We'll fit a 1PL IRT model.
+* `ltm` package
+* `rasch` function requires only item response data, with each column representing a unique item.
+
+```{r model_data, message = FALSE, warning = FALSE}
+md <- s_d %>% 
+  select(-1:-3)
+
+# install.packages("ltm")
+library(ltm)
+model <- rasch(md)
+```
+
+----
+```{r mod_1_smry}
+summary(model)
+```
+
+----
+## One last note
+For many models, you can get tidy output using the *broom* package (part of the *tidyverse*)
+
+```{r lm_mod}
+lmd <- td %>% 
+  distinct(stu_name, .keep_all = TRUE) %>% 
+  mutate(gender = as.factor(gender))
+
+mod <- lm(raw_score ~ gender, data = lmd)
+```
+
+----
+```{r broom_ex}
+library(broom)
+tidy(mod, conf.int = TRUE)
+glance(mod)
+```
+
+----
+Broom is particularly useful for things like plotting. The below code will work for any linear model (with any number of predictors)
+
+```{r broom_plot, fig.width = 13, fig.height = 6}
+tidy_mod <- tidy(mod, conf.int = TRUE)
+ggplot(tidy_mod, aes(estimate, term, color = term)) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
+    geom_vline(xintercept = 0)
+```
+
+---- .segue
+# Lab
+
+----
+## *iris* data
+Already available to you as soon as you launch R. 
+
+```{r iris_data_echo, eval = FALSE}
+data(iris)
+head(iris)
+str(iris)
+summary(iris)
+View(iris)
+```
+
+```{r iris_data, echo = FALSE}
+knitr::kable(head(iris))
+```
+
+----
+## Work with a neighbor to
+* Identify the variables (not the column names, the variables)
+* Sketch how these data would look  in a tidy form (at least mentally)
+* What would be the first step in tidying these data? (use `View(iris)` to see the full dataset easier). 
+
+Work with a partner to try to conduct the first step in tidying the data
+
+----
+## Step 1: Gather the sepal and petal columns
+
+```{r iris_gather}
+iris %>% 
+  tbl_df() %>% 
+  gather(flower_part, measurement, -Species)
+```
+
+----
+## iris data
+What needs to happen next? Are the data tidy?
+
+>* Work with a partner to figure out the next step, and try to do it.
+    + *Hint:* Use `"\\."` as your separator rather than just `"."`. I'll explain why momentarily.
+
+----
+## Step 2: Separate the flower_part column
+
+```{r iris_separate}
+iris %>% 
+  tbl_df() %>% 
+  gather(flower_part, measurement, -Species) %>% 
+  separate(flower_part, c("flower_part", "measure_of"), sep = "\\.")
+```
+
+----
+## iris data
+What needs to happen next? Are the data tidy?
+
+>* Nothing! They are tidy! Just need to store them in an object.
+>* Now... Calculate the average Sepal Width by Species.
+>* Explore the data in a few other ways of your choosing.
+
+----
+## Some descriptives
+```{r iris_desc}
+iris_tidy <- iris %>% 
+  tbl_df() %>% 
+  gather(flower_part, measurement, -Species) %>% 
+  separate(flower_part, c("flower_part", "measure_of"), sep = "\\.")
+
+iris_tidy %>% 
+  group_by(Species, measure_of) %>% 
+  summarize(mean = mean(measurement)) %>% 
+  filter(measure_of == "Width")
+```
+
+----
+## Some more descriptives
+
+```{r iris_desc2}
+iris_tidy %>% 
+  group_by(Species, flower_part, measure_of) %>% 
+  summarize(mean = mean(measurement), 
+            standard_dev = sd(measurement),
+            iqr = IQR(measurement))
+```

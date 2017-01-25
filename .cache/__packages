@@ -1,0 +1,17 @@
+base
+knitr
+stringr
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+MASS
+msm
+mvtnorm
+sfsmisc
+polycor
+ltm
+broom

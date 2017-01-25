@@ -1,0 +1,3487 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>An introduction to tidy data and the tidyverse</title>
+  <meta charset="utf-8">
+  <meta name="description" content="An introduction to tidy data and the tidyverse">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>An introduction to tidy data and the tidyverse</h1>
+    <h2></h2>
+    <p>Daniel Anderson<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+<h2>Agenda</h2>
+
+<ul>
+<li>Introduce the tidyverse</li>
+<li>Introduce the concept of tidy data</li>
+<li>Tidy a simple dataset together</li>
+<li>Discuss why tidy data are useful (particularly when used within the tidyverse)</li>
+<li>Overview packages in the tidyverse</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>tidyverse (briefly)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Collection of packages written primarily by Hadley Wickham. </li>
+<li>All built around a common philosophy </li>
+<li><em>tidy</em> is actually a technical term for a specific data format</li>
+<li>Today will be focused around the tidyverse as an efficient way for you to &quot;break in&quot; to R</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/img/had.png" alt="had"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>tidyverse packages</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The primary packages included in the tidyverse include:</p>
+
+<ul>
+<li><em>ggplot2</em> for data visualization</li>
+<li><em>dplyr</em> for data manipulation</li>
+<li><em>tidyr</em> for getting data in a tidy format (in the technical sense)</li>
+<li><em>readr</em> for importing data</li>
+<li><em>purrr</em> for functional programming</li>
+<li><em>tibble</em> for working with a different kind of data frame, called a tibble</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Other tidyverse packages</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li><em>hms</em> for time data</li>
+<li><em>stringr</em> for string data</li>
+<li><em>lubridate</em> for date/time data</li>
+<li><em>forcats</em> for factors</li>
+<li><em>DBI</em> for databases</li>
+<li><em>haven</em> for SPSS, SAS and Stata files</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li><em>httr</em> for web apis</li>
+<li><em>jsonlite</em> for JSON</li>
+<li><em>readxl</em> for Excel files</li>
+<li><em>rvest</em> for web scraping</li>
+<li><em>xml2</em> for XML</li>
+<li><em>modelr</em> for simple modeling</li>
+<li><em>broom</em> for transforming model results into tidy data</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2><code>tidyr</code> and <code>dplyr</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Two packages we will use most today</p>
+
+<ul>
+<li><code>tidyr</code>: Helps you get your data into a tidy format</li>
+<li><code>dplyr</code>: Helps you manipulate your data (create, remove, summarize, etc. )</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Getting started</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Install once with <code>install.packages()</code></li>
+<li>Load each time with <code>library()</code></li>
+</ul>
+
+<pre><code class="r"># Install once
+install.packages(&quot;tidyverse&quot;)
+
+# Load each time
+library(tidyverse)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Important qualifications</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Everything that can be done through the tidyverse can be done through base R. 
+  (and some things can even be done multiple ways through the tidyverse and base R)</p>
+
+<p>We&#39;ll focus on the tidyverse because it&#39;s a good way to &quot;break in&quot; to R.</p>
+
+<p>Later, you can go deeper on your own (or perhaps through another course) to 
+  learn more about base R.</p>
+
+<p><em>I know base R better than the tidyverse: I&#39;m learning the tidyverse with you</em></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Why tidyverse?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Verbs</li>
+<li>Efficiency</li>
+<li>More intuitive when getting first learning R</li>
+</ul>
+
+<p><br></p>
+
+<p>We will learn some base R - it is unavoidable. A <em>huge</em> part of learning R is learning how to not only search for answers when you&#39;re having problems, but also to understand the answers provided! In many cases, this requires understanding at least some base R.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Philosophy of the tidyverse</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <p><img src="assets/img/stack-1.jpeg" alt="stack-1">
+<img src="assets/img/stack-2.jpg" alt="stack-2"></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/img/pit.jpeg" alt="pit"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:Lavender;">
+  <hgroup>
+    <h2>Tidy data</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <div align = "right">
+<img src = assets/img/tidy_up.png width = 600 height = 200>
+</div>
+
+<div align = "left">
+<img src = assets/img/tidy_data.png width = 600 height = 200>
+</div>
+
+</div>
+<div style='float:right;width:48%;'>
+  <div align = "center">
+<img src = assets/img/tidy_up2.jpeg width = 300 height = 300>
+</div>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="quote" id="slide-11" style="background:;">
+  <article data-timings="">
+    <p><q> It is often said that 80% of data analysis is spent on the process of cleaning and preparing the data.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Persistent and varied challenge</li>
+<li>Little research on how to do it well
+
+<ul>
+<li>Enter Hadley Wickham</li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <div align = "center">
+<img src = assets/img/hadley_jss.png width = 500 height = 750>
+</div>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Tidy data</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Definition</h1>
+
+<ol>
+<li>Each variable is a column</li>
+<li>Each observation is a row</li>
+<li>Each type of observational unit forms a table</li>
+</ol>
+
+<div align = "left">
+<img src = assets/img/tidy_data.png width = 1000 height = 350>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Common ways rectangular datasets are &quot;messy&quot;</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>(We won&#39;t get into multiple data files and how they interact, i.e., relational databases)</p>
+
+<ul>
+<li>Column headers are values, not variable names</li>
+<li>Multiple variables stored in one column</li>
+<li>Variables are stored in both rows and columns</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>An example with SEDA data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Any ideas why this is messy? (keep in mind, this dataset includes &quot;long&quot; in the file name)</p>
+
+<table><thead>
+<tr>
+<th align="right">leaid</th>
+<th align="left">leaname</th>
+<th align="right">fips</th>
+<th align="left">stateabb</th>
+<th align="right">year</th>
+<th align="right">grade</th>
+<th align="right">mean_link_ela</th>
+<th align="right">se_link_ela</th>
+<th align="right">mean_link_math</th>
+<th align="right">se_link_math</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">100002</td>
+<td align="left">ALABAMA YOUTH SERVICES</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2009</td>
+<td align="right">8</td>
+<td align="right">210.55</td>
+<td align="right">6.72</td>
+<td align="right">220.67</td>
+<td align="right">7.06</td>
+</tr>
+<tr>
+<td align="right">100002</td>
+<td align="left">ALABAMA YOUTH SERVICES</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2011</td>
+<td align="right">8</td>
+<td align="right">231.66</td>
+<td align="right">6.74</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr>
+<td align="right">100002</td>
+<td align="left">ALABAMA YOUTH SERVICES</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2012</td>
+<td align="right">8</td>
+<td align="right">226.18</td>
+<td align="right">6.66</td>
+<td align="right">233.13</td>
+<td align="right">6.98</td>
+</tr>
+<tr>
+<td align="right">100005</td>
+<td align="left">ALBERTVILLE CITY</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2009</td>
+<td align="right">3</td>
+<td align="right">204.47</td>
+<td align="right">2.75</td>
+<td align="right">216.36</td>
+<td align="right">2.01</td>
+</tr>
+<tr>
+<td align="right">100005</td>
+<td align="left">ALBERTVILLE CITY</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2009</td>
+<td align="right">4</td>
+<td align="right">207.40</td>
+<td align="right">2.94</td>
+<td align="right">223.03</td>
+<td align="right">2.34</td>
+</tr>
+<tr>
+<td align="right">100005</td>
+<td align="left">ALBERTVILLE CITY</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2009</td>
+<td align="right">5</td>
+<td align="right">216.86</td>
+<td align="right">2.60</td>
+<td align="right">230.42</td>
+<td align="right">2.29</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <article data-timings="">
+    <p>The offending columns</p>
+
+<p><br></p>
+
+<table><thead>
+<tr>
+<th align="right">mean_link_ela</th>
+<th align="right">se_link_ela</th>
+<th align="right">mean_link_math</th>
+<th align="right">se_link_math</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">210.55</td>
+<td align="right">6.72</td>
+<td align="right">220.67</td>
+<td align="right">7.06</td>
+</tr>
+<tr>
+<td align="right">231.66</td>
+<td align="right">6.74</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr>
+<td align="right">226.18</td>
+<td align="right">6.66</td>
+<td align="right">233.13</td>
+<td align="right">6.98</td>
+</tr>
+<tr>
+<td align="right">204.47</td>
+<td align="right">2.75</td>
+<td align="right">216.36</td>
+<td align="right">2.01</td>
+</tr>
+<tr>
+<td align="right">207.40</td>
+<td align="right">2.94</td>
+<td align="right">223.03</td>
+<td align="right">2.34</td>
+</tr>
+<tr>
+<td align="right">216.86</td>
+<td align="right">2.60</td>
+<td align="right">230.42</td>
+<td align="right">2.29</td>
+</tr>
+</tbody></table>
+
+<p>Problem? The column headers are values, not variables. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Tidied version</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="right">leaid</th>
+<th align="left">leaname</th>
+<th align="right">fips</th>
+<th align="left">stateabb</th>
+<th align="right">year</th>
+<th align="right">grade</th>
+<th align="left">Subject</th>
+<th align="right">mean</th>
+<th align="right">se</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">100002</td>
+<td align="left">ALABAMA YOUTH SERVICES</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2009</td>
+<td align="right">8</td>
+<td align="left">ela</td>
+<td align="right">210.5474</td>
+<td align="right">6.723581</td>
+</tr>
+<tr>
+<td align="right">100002</td>
+<td align="left">ALABAMA YOUTH SERVICES</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2011</td>
+<td align="right">8</td>
+<td align="left">ela</td>
+<td align="right">231.6601</td>
+<td align="right">6.741922</td>
+</tr>
+<tr>
+<td align="right">100002</td>
+<td align="left">ALABAMA YOUTH SERVICES</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2012</td>
+<td align="right">8</td>
+<td align="left">ela</td>
+<td align="right">226.1813</td>
+<td align="right">6.657756</td>
+</tr>
+<tr>
+<td align="right">100005</td>
+<td align="left">ALBERTVILLE CITY</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2009</td>
+<td align="right">3</td>
+<td align="left">ela</td>
+<td align="right">204.4659</td>
+<td align="right">2.747565</td>
+</tr>
+<tr>
+<td align="right">100005</td>
+<td align="left">ALBERTVILLE CITY</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2009</td>
+<td align="right">4</td>
+<td align="left">ela</td>
+<td align="right">207.4045</td>
+<td align="right">2.939638</td>
+</tr>
+<tr>
+<td align="right">100005</td>
+<td align="left">ALBERTVILLE CITY</td>
+<td align="right">1</td>
+<td align="left">AL</td>
+<td align="right">2009</td>
+<td align="right">5</td>
+<td align="left">ela</td>
+<td align="right">216.8594</td>
+<td align="right">2.599224</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Other examples</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>(from the JSS paper)</p>
+
+<table><thead>
+<tr>
+<th align="left">religion</th>
+<th align="right">&lt;$10k</th>
+<th align="right">$10-20k</th>
+<th align="right">$20-30k</th>
+<th align="right">$30-40k</th>
+<th align="right">$40-50k</th>
+<th align="right">$50-75k</th>
+<th align="right">$75-100k</th>
+<th align="right">$100-150k</th>
+<th align="right">&gt;150k</th>
+<th align="right">Don&#39;t know/refused</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Agnostic</td>
+<td align="right">27</td>
+<td align="right">34</td>
+<td align="right">60</td>
+<td align="right">81</td>
+<td align="right">76</td>
+<td align="right">137</td>
+<td align="right">122</td>
+<td align="right">109</td>
+<td align="right">84</td>
+<td align="right">96</td>
+</tr>
+<tr>
+<td align="left">Atheist</td>
+<td align="right">12</td>
+<td align="right">27</td>
+<td align="right">37</td>
+<td align="right">52</td>
+<td align="right">35</td>
+<td align="right">70</td>
+<td align="right">73</td>
+<td align="right">59</td>
+<td align="right">74</td>
+<td align="right">76</td>
+</tr>
+<tr>
+<td align="left">Buddhist</td>
+<td align="right">27</td>
+<td align="right">21</td>
+<td align="right">30</td>
+<td align="right">34</td>
+<td align="right">33</td>
+<td align="right">58</td>
+<td align="right">62</td>
+<td align="right">39</td>
+<td align="right">53</td>
+<td align="right">54</td>
+</tr>
+<tr>
+<td align="left">Catholic</td>
+<td align="right">418</td>
+<td align="right">617</td>
+<td align="right">732</td>
+<td align="right">670</td>
+<td align="right">638</td>
+<td align="right">1116</td>
+<td align="right">949</td>
+<td align="right">792</td>
+<td align="right">633</td>
+<td align="right">1489</td>
+</tr>
+<tr>
+<td align="left">Don’t know/refused</td>
+<td align="right">15</td>
+<td align="right">14</td>
+<td align="right">15</td>
+<td align="right">11</td>
+<td align="right">10</td>
+<td align="right">35</td>
+<td align="right">21</td>
+<td align="right">17</td>
+<td align="right">18</td>
+<td align="right">116</td>
+</tr>
+<tr>
+<td align="left">Evangelical Prot</td>
+<td align="right">575</td>
+<td align="right">869</td>
+<td align="right">1064</td>
+<td align="right">982</td>
+<td align="right">881</td>
+<td align="right">1486</td>
+<td align="right">949</td>
+<td align="right">723</td>
+<td align="right">414</td>
+<td align="right">1529</td>
+</tr>
+<tr>
+<td align="left">Hindu</td>
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="right">7</td>
+<td align="right">9</td>
+<td align="right">11</td>
+<td align="right">34</td>
+<td align="right">47</td>
+<td align="right">48</td>
+<td align="right">54</td>
+<td align="right">37</td>
+</tr>
+<tr>
+<td align="left">Historically Black Prot</td>
+<td align="right">228</td>
+<td align="right">244</td>
+<td align="right">236</td>
+<td align="right">238</td>
+<td align="right">197</td>
+<td align="right">223</td>
+<td align="right">131</td>
+<td align="right">81</td>
+<td align="right">78</td>
+<td align="right">339</td>
+</tr>
+<tr>
+<td align="left">Jehovah&#39;s Witness</td>
+<td align="right">20</td>
+<td align="right">27</td>
+<td align="right">24</td>
+<td align="right">24</td>
+<td align="right">21</td>
+<td align="right">30</td>
+<td align="right">15</td>
+<td align="right">11</td>
+<td align="right">6</td>
+<td align="right">37</td>
+</tr>
+<tr>
+<td align="left">Jewish</td>
+<td align="right">19</td>
+<td align="right">19</td>
+<td align="right">25</td>
+<td align="right">25</td>
+<td align="right">30</td>
+<td align="right">95</td>
+<td align="right">69</td>
+<td align="right">87</td>
+<td align="right">151</td>
+<td align="right">162</td>
+</tr>
+<tr>
+<td align="left">Mainline Prot</td>
+<td align="right">289</td>
+<td align="right">495</td>
+<td align="right">619</td>
+<td align="right">655</td>
+<td align="right">651</td>
+<td align="right">1107</td>
+<td align="right">939</td>
+<td align="right">753</td>
+<td align="right">634</td>
+<td align="right">1328</td>
+</tr>
+<tr>
+<td align="left">Mormon</td>
+<td align="right">29</td>
+<td align="right">40</td>
+<td align="right">48</td>
+<td align="right">51</td>
+<td align="right">56</td>
+<td align="right">112</td>
+<td align="right">85</td>
+<td align="right">49</td>
+<td align="right">42</td>
+<td align="right">69</td>
+</tr>
+<tr>
+<td align="left">Muslim</td>
+<td align="right">6</td>
+<td align="right">7</td>
+<td align="right">9</td>
+<td align="right">10</td>
+<td align="right">9</td>
+<td align="right">23</td>
+<td align="right">16</td>
+<td align="right">8</td>
+<td align="right">6</td>
+<td align="right">22</td>
+</tr>
+<tr>
+<td align="left">Orthodox</td>
+<td align="right">13</td>
+<td align="right">17</td>
+<td align="right">23</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="right">47</td>
+<td align="right">38</td>
+<td align="right">42</td>
+<td align="right">46</td>
+<td align="right">73</td>
+</tr>
+<tr>
+<td align="left">Other Christian</td>
+<td align="right">9</td>
+<td align="right">7</td>
+<td align="right">11</td>
+<td align="right">13</td>
+<td align="right">13</td>
+<td align="right">14</td>
+<td align="right">18</td>
+<td align="right">14</td>
+<td align="right">12</td>
+<td align="right">18</td>
+</tr>
+<tr>
+<td align="left">Other Faiths</td>
+<td align="right">20</td>
+<td align="right">33</td>
+<td align="right">40</td>
+<td align="right">46</td>
+<td align="right">49</td>
+<td align="right">63</td>
+<td align="right">46</td>
+<td align="right">40</td>
+<td align="right">41</td>
+<td align="right">71</td>
+</tr>
+<tr>
+<td align="left">Other World Religions</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">7</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">8</td>
+</tr>
+<tr>
+<td align="left">Unaffiliated</td>
+<td align="right">217</td>
+<td align="right">299</td>
+<td align="right">374</td>
+<td align="right">365</td>
+<td align="right">341</td>
+<td align="right">528</td>
+<td align="right">407</td>
+<td align="right">321</td>
+<td align="right">258</td>
+<td align="right">597</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>The tidied version</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">religion</th>
+<th align="left">income</th>
+<th align="right">freq</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">&lt;$10k</td>
+<td align="right">27</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">$10-20k</td>
+<td align="right">34</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">$20-30k</td>
+<td align="right">60</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">$30-40k</td>
+<td align="right">81</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">$40-50k</td>
+<td align="right">76</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">$50-75k</td>
+<td align="right">137</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">$75-100k</td>
+<td align="right">122</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">$100-150k</td>
+<td align="right">109</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">&gt;150k</td>
+<td align="right">84</td>
+</tr>
+<tr>
+<td align="left">Agnostic</td>
+<td align="left">Don&#39;t know/refused</td>
+<td align="right">96</td>
+</tr>
+<tr>
+<td align="left">Atheist</td>
+<td align="left">&lt;$10k</td>
+<td align="right">12</td>
+</tr>
+<tr>
+<td align="left">Atheist</td>
+<td align="left">$10-20k</td>
+<td align="right">27</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>Yet another example</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">country</th>
+<th align="right">year</th>
+<th align="right">m014</th>
+<th align="right">m1524</th>
+<th align="right">m2534</th>
+<th align="right">m3544</th>
+<th align="right">m4554</th>
+<th align="right">mu</th>
+<th align="right">f014</th>
+<th align="right">f1524</th>
+<th align="right">f2534</th>
+<th align="right">f3544</th>
+<th align="right">f4554</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">AE</td>
+<td align="right">2000</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">6</td>
+<td align="right">5</td>
+<td align="right"></td>
+<td align="right">3</td>
+<td align="right">16</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AF</td>
+<td align="right">2000</td>
+<td align="right">52</td>
+<td align="right">228</td>
+<td align="right">183</td>
+<td align="right">149</td>
+<td align="right">129</td>
+<td align="right"></td>
+<td align="right">93</td>
+<td align="right">414</td>
+<td align="right">565</td>
+<td align="right">339</td>
+<td align="right">205</td>
+</tr>
+<tr>
+<td align="left">AG</td>
+<td align="right">2000</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right"></td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AL</td>
+<td align="right">2000</td>
+<td align="right">2</td>
+<td align="right">19</td>
+<td align="right">21</td>
+<td align="right">14</td>
+<td align="right">24</td>
+<td align="right"></td>
+<td align="right">3</td>
+<td align="right">11</td>
+<td align="right">10</td>
+<td align="right">8</td>
+<td align="right">8</td>
+</tr>
+<tr>
+<td align="left">AM</td>
+<td align="right">2000</td>
+<td align="right">2</td>
+<td align="right">152</td>
+<td align="right">130</td>
+<td align="right">131</td>
+<td align="right">63</td>
+<td align="right"></td>
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">27</td>
+<td align="right">24</td>
+<td align="right">8</td>
+</tr>
+<tr>
+<td align="left">AN</td>
+<td align="right">2000</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AO</td>
+<td align="right">2000</td>
+<td align="right">186</td>
+<td align="right">999</td>
+<td align="right">1003</td>
+<td align="right">912</td>
+<td align="right">482</td>
+<td align="right"></td>
+<td align="right">247</td>
+<td align="right">1142</td>
+<td align="right">1091</td>
+<td align="right">844</td>
+<td align="right">417</td>
+</tr>
+<tr>
+<td align="left">AR</td>
+<td align="right">2000</td>
+<td align="right">97</td>
+<td align="right">278</td>
+<td align="right">594</td>
+<td align="right">402</td>
+<td align="right">419</td>
+<td align="right"></td>
+<td align="right">121</td>
+<td align="right">544</td>
+<td align="right">479</td>
+<td align="right">262</td>
+<td align="right">230</td>
+</tr>
+<tr>
+<td align="left">AS</td>
+<td align="right">2000</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right">1</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right">1</td>
+</tr>
+</tbody></table>
+
+<p>In this example, <em>M</em> indicates if the data came from a male, while <em>F</em> indicates female. The subsequent numbers represent the age range. Tidying these data will be a two step process.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>Step one</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">country</th>
+<th align="right">year</th>
+<th align="left">variable</th>
+<th align="right">cases</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AE</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td align="left">AF</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">52</td>
+</tr>
+<tr>
+<td align="left">AG</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AL</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td align="left">AM</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td align="left">AN</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AO</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">186</td>
+</tr>
+<tr>
+<td align="left">AR</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">97</td>
+</tr>
+<tr>
+<td align="left">AS</td>
+<td align="right">2000</td>
+<td align="left">m014</td>
+<td align="right">NA</td>
+</tr>
+</tbody></table>
+
+<p>Notice this is much closer to what we want, but we have a problem now in that we have <strong>two variables stored in one column</strong>.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Step two: Tidied data</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">country</th>
+<th align="right">year</th>
+<th align="left">sex</th>
+<th align="left">age_range</th>
+<th align="right">cases</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">0-14</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">15-24</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">25-34</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">35-44</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">45-54</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">55-64</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AD</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">65+</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">AE</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">0-14</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td align="left">AE</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">15-24</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td align="left">AE</td>
+<td align="right">2000</td>
+<td align="left">m</td>
+<td align="left">25-34</td>
+<td align="right">4</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Variables as rows and columns</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">id</th>
+<th align="right">year</th>
+<th align="right">month</th>
+<th align="left">element</th>
+<th align="right">d1</th>
+<th align="right">d2</th>
+<th align="right">d3</th>
+<th align="right">d4</th>
+<th align="right">d5</th>
+<th align="right">d6</th>
+<th align="right">d7</th>
+<th align="right">d8</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">1</td>
+<td align="left">tmax</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">1</td>
+<td align="left">tmin</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">2</td>
+<td align="left">tmax</td>
+<td align="right"></td>
+<td align="right">27.3</td>
+<td align="right">24.1</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">2</td>
+<td align="left">tmin</td>
+<td align="right"></td>
+<td align="right">14.4</td>
+<td align="right">14.4</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">3</td>
+<td align="left">tmax</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right">32.1</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">3</td>
+<td align="left">tmin</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right">14.2</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">4</td>
+<td align="left">tmax</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">4</td>
+<td align="left">tmin</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">5</td>
+<td align="left">tmax</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">5</td>
+<td align="left">tmin</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>Two Steps</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <h1>Step 1</h1>
+
+<table><thead>
+<tr>
+<th align="left">id</th>
+<th align="right">year</th>
+<th align="right">month</th>
+<th align="left">element</th>
+<th align="left">day_key</th>
+<th align="right">value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">12</td>
+<td align="left">tmax</td>
+<td align="left">d1</td>
+<td align="right">29.9</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">12</td>
+<td align="left">tmin</td>
+<td align="left">d1</td>
+<td align="right">13.8</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">2</td>
+<td align="left">tmax</td>
+<td align="left">d2</td>
+<td align="right">27.3</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">2</td>
+<td align="left">tmin</td>
+<td align="left">d2</td>
+<td align="right">14.4</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">11</td>
+<td align="left">tmax</td>
+<td align="left">d2</td>
+<td align="right">31.3</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">11</td>
+<td align="left">tmin</td>
+<td align="left">d2</td>
+<td align="right">16.3</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">2</td>
+<td align="left">tmax</td>
+<td align="left">d3</td>
+<td align="right">24.1</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">2</td>
+<td align="left">tmin</td>
+<td align="left">d3</td>
+<td align="right">14.4</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">7</td>
+<td align="left">tmax</td>
+<td align="left">d3</td>
+<td align="right">28.6</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="right">2010</td>
+<td align="right">7</td>
+<td align="left">tmin</td>
+<td align="left">d3</td>
+<td align="right">17.5</td>
+</tr>
+</tbody></table>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h1>Step 2</h1>
+
+<table><thead>
+<tr>
+<th align="left">id</th>
+<th align="left">date</th>
+<th align="right">tmax</th>
+<th align="right">tmin</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-01-01</td>
+<td align="right">27.8</td>
+<td align="right">14.5</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-02-02</td>
+<td align="right">29.7</td>
+<td align="right">13.4</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-02-02</td>
+<td align="right">27.3</td>
+<td align="right">14.4</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-02-02</td>
+<td align="right">29.9</td>
+<td align="right">10.7</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-02-02</td>
+<td align="right">24.1</td>
+<td align="right">14.4</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-03-03</td>
+<td align="right">34.5</td>
+<td align="right">16.8</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-03-03</td>
+<td align="right">31.1</td>
+<td align="right">17.6</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-03-03</td>
+<td align="right">32.1</td>
+<td align="right">14.2</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-04-04</td>
+<td align="right">36.3</td>
+<td align="right">16.7</td>
+</tr>
+<tr>
+<td align="left">MX17004</td>
+<td align="left">2010-05-05</td>
+<td align="right">33.2</td>
+<td align="right">18.2</td>
+</tr>
+</tbody></table>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>A caveat</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>There are many reasons why you might want to have messy data. However, tidy data is an extremely useful format generally, and particularly useful when applying tools within the <em>tidyverse</em>. </p></li>
+<li><p>All packages within the tidyverse are designed to either help you get your data in a tidy format, or assume your data are already in a tidy format.</p></li>
+<li><p>Assuming a common data format leads to large jumps in efficiency, as the output from certain functions can be directly input into others.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>The tidyverse data analysis philosophy</h2>
+  </hgroup>
+  <article data-timings="">
+    <div align = "left">
+<img src = assets/img/data-science.png width = 1000 height = 400>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>Why tidy data?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>When you put your data in a tidy format they are &quot;ready to go&quot; for essentially all the packages in the tidyverse. Let&#39;s look at some example item-level data.</p></li>
+<li><p>First, let&#39;s tidy some data together, as a group. Then, I&#39;ll demonstrate why this format can be so helpful within the tidyverse</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Load the data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Because we&#39;re working through the <em>tidyverse</em>, we&#39;ll use the <em>readr</em> package and the <code>read_csv</code> function, rather than <code>base::read.csv</code>. These functions differ in the following ways:</p>
+
+<div align = "left">
+<img src = assets/img/read_csv.png width = 1000 height = 300>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-29" style="background:;">
+  <hgroup>
+    <h1>Load data with RStudio demo</h1>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Other ways to load data</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">setwd(&quot;/Users/Daniel/Dropbox/Teaching/tidyverse_course/2_tidy_data/data/&quot;)
+library(readr)
+d &lt;- read_csv(&quot;exam1.csv&quot;)
+knitr::kable(head(d))
+</code></pre>
+
+<table><thead>
+<tr>
+<th align="left">stu_name</th>
+<th align="left">gender</th>
+<th align="right">item_1</th>
+<th align="right">item_2</th>
+<th align="right">item_3</th>
+<th align="right">item_4</th>
+<th align="right">item_5</th>
+<th align="right">item_6</th>
+<th align="right">item_7</th>
+<th align="right">item_8</th>
+<th align="right">item_9</th>
+<th align="right">item_10</th>
+<th align="right">item_11</th>
+<th align="right">item_12</th>
+<th align="right">item_13</th>
+<th align="right">item_14</th>
+<th align="right">item_15</th>
+<th align="right">item_16</th>
+<th align="right">item_17</th>
+<th align="right">item_18</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Adam</td>
+<td align="left">M</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Anne</td>
+<td align="left">F</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Audrey</td>
+<td align="left">F</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Barbara</td>
+<td align="left">F</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Bert</td>
+<td align="left">M</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Betty</td>
+<td align="left">F</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>Pop Quiz Time</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Are these data tidy?</li>
+<li>If not, what needs to happen to make them tidy?</li>
+<li>What are the variables? What are the values?</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>Verbs: <code>tidyr</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>gather()</code></li>
+<li><code>spread()</code></li>
+<li><code>separate()</code> and <code>extract()</code></li>
+<li><code>unite()</code></li>
+<li><code>nest()</code></li>
+</ul>
+
+<p>What do you think each do?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>Quick aside: <code>%&gt;%</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The &quot;pipe&quot; operator takes the output from one function and feeds it into the 
+next. For example:</p>
+
+<pre><code class="r">d$gender %&gt;% table()
+</code></pre>
+
+<pre><code>## .
+##  F  M 
+## 18 17
+</code></pre>
+
+<pre><code class="r">d %&gt;% str()
+</code></pre>
+
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    35 obs. of  20 variables:
+##  $ stu_name: chr  &quot;Adam&quot; &quot;Anne&quot; &quot;Audrey&quot; &quot;Barbara&quot; ...
+##  $ gender  : chr  &quot;M&quot; &quot;F&quot; &quot;F&quot; &quot;F&quot; ...
+##  $ item_1  : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ item_2  : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ item_3  : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ item_4  : int  1 1 1 1 1 1 1 1 0 1 ...
+##  $ item_5  : int  1 1 1 0 1 1 1 1 1 0 ...
+##  $ item_6  : int  1 1 1 0 0 1 1 1 1 0 ...
+##  $ item_7  : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ item_8  : int  0 1 1 0 0 1 1 1 1 0 ...
+##  $ item_9  : int  0 1 1 0 1 1 1 1 1 1 ...
+##  $ item_10 : int  0 1 1 1 1 0 1 1 0 0 ...
+##  $ item_11 : int  0 0 0 0 0 0 1 0 0 0 ...
+##  $ item_12 : int  0 0 0 0 0 0 1 0 0 0 ...
+##  $ item_13 : int  0 0 1 0 0 0 1 0 0 0 ...
+##  $ item_14 : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ item_15 : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ item_16 : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ item_17 : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ item_18 : int  0 0 0 0 0 0 0 0 0 0 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>Step 1: <code>gather</code> the item variables</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Change all item variables into two variables: <code>item</code> and <code>score</code></li>
+</ul>
+
+<p><br></p>
+
+<p><img src="assets/img/gather.png" alt="gather"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <article data-timings="">
+    <p>Try running the following code</p>
+
+<pre><code class="r">d %&gt;% 
+  gather(key = item, value = score, -1:-2) 
+</code></pre>
+
+<ul>
+<li>Note that in the above code, we omit the <code>data</code> argument, because it&#39;s being &quot;piped&quot; in.</li>
+<li>Third argument to <code>...</code> says we want to omit the first and second columns in when gathering.</li>
+</ul>
+
+<p><br></p>
+
+<p>What do you get? Are these data tidy now?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>The code on the previous slide basically puts our data in a tidy format. </li>
+</ul>
+
+<p><strong>BUT</strong></p>
+
+<ul>
+<li>We didn&#39;t store the result in an object (try printing <code>d</code> now)</li>
+<li>Need to store the tidy data in a new object (or reassign <code>d</code>)</li>
+<li>To &quot;clean up&quot; some, could transform the <code>item</code> variable to numeric</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>Finish tidying the data</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">td &lt;- d %&gt;% 
+  gather(item, score, -1:-2) %&gt;% 
+  mutate(item = parse_number(item))
+</code></pre>
+
+<ul>
+<li><code>parse_number()</code> comes from the <em>readr</em> package.</li>
+<li>To see the data you&#39;ll need to print <code>td</code> (or whatever you reassigned it as) to the console.</li>
+</ul>
+
+<table><thead>
+<tr>
+<th align="left">stu_name</th>
+<th align="left">gender</th>
+<th align="right">item</th>
+<th align="right">score</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Adam</td>
+<td align="left">M</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Anne</td>
+<td align="left">F</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Audrey</td>
+<td align="left">F</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Barbara</td>
+<td align="left">F</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Bert</td>
+<td align="left">M</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Betty</td>
+<td align="left">F</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>An alternative</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>(please run this code, following the explanation)</p>
+
+<pre><code class="r">td &lt;- d %&gt;% 
+  gather(item, score, -1:-2) %&gt;% 
+  separate(item, c(&quot;discard&quot;, &quot;item&quot;), sep = &quot;_&quot;) %&gt;% 
+  select(-discard)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <hgroup>
+    <h2>Why are tidy data useful?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>When used in conjunction with <code>dplyr</code>, tidy data can result in large gains in efficiency.</li>
+</ul>
+
+<p>For example, suppose we want to calculate the proportion of students responding correctly to each item.</p>
+
+<pre><code class="r">td %&gt;% 
+  group_by(item) %&gt;% 
+  summarize(prop = mean(score))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-40" style="background:;">
+  <article data-timings="">
+    <pre><code>## # A tibble: 18 × 2
+##     item       prop
+##    &lt;chr&gt;      &lt;dbl&gt;
+## 1      1 1.00000000
+## 2     10 0.68571429
+## 3     11 0.34285714
+## 4     12 0.17142857
+## 5     13 0.20000000
+## 6     14 0.08571429
+## 7     15 0.02857143
+## 8     16 0.02857143
+## 9     17 0.02857143
+## 10    18 0.00000000
+## 11     2 1.00000000
+## 12     3 1.00000000
+## 13     4 0.91428571
+## 14     5 0.88571429
+## 15     6 0.85714286
+## 16     7 0.88571429
+## 17     8 0.77142857
+## 18     9 0.85714286
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-41" style="background:;">
+  <article data-timings="">
+    <p>What if we also wanted to know the standard deviation?</p>
+
+<pre><code class="r">td %&gt;% 
+  group_by(item) %&gt;% 
+  summarize(prop = mean(score),
+            sd = sd(score))
+</code></pre>
+
+<pre><code>## # A tibble: 18 × 3
+##     item       prop        sd
+##    &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+## 1      1 1.00000000 0.0000000
+## 2     10 0.68571429 0.4710082
+## 3     11 0.34285714 0.4815940
+## 4     12 0.17142857 0.3823853
+## 5     13 0.20000000 0.4058397
+## 6     14 0.08571429 0.2840286
+## 7     15 0.02857143 0.1690309
+## 8     16 0.02857143 0.1690309
+## 9     17 0.02857143 0.1690309
+## 10    18 0.00000000 0.0000000
+## 11     2 1.00000000 0.0000000
+## 12     3 1.00000000 0.0000000
+## 13     4 0.91428571 0.2840286
+## 14     5 0.88571429 0.3228029
+## 15     6 0.85714286 0.3550358
+## 16     7 0.88571429 0.3228029
+## 17     8 0.77142857 0.4260430
+## 18     9 0.85714286 0.3550358
+</code></pre>
+
+<hr>
+
+<p>What if we wanted to know the proportion correct for each item by gender?</p>
+
+<pre><code class="r">td %&gt;% 
+  group_by(item, gender) %&gt;% 
+  summarize(prop = mean(score))
+</code></pre>
+
+<pre><code>## Source: local data frame [36 x 3]
+## Groups: item [?]
+## 
+##     item gender       prop
+##    &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;
+## 1      1      F 1.00000000
+## 2      1      M 1.00000000
+## 3     10      F 0.72222222
+## 4     10      M 0.64705882
+## 5     11      F 0.05555556
+## 6     11      M 0.64705882
+## 7     12      F 0.00000000
+## 8     12      M 0.35294118
+## 9     13      F 0.22222222
+## 10    13      M 0.17647059
+## # ... with 26 more rows
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-42" style="background:;">
+  <hgroup>
+    <h2>Verbs: <em>dplyr</em></h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>group_by()</code></li>
+<li><code>filter()</code> and <code>slice()</code></li>
+<li><code>arrange()</code></li>
+<li><code>select()</code> and <code>rename()</code></li>
+<li><code>distinct()</code></li>
+<li><code>mutate()</code> and <code>transmutate()</code></li>
+<li><code>summarize()</code> (or <code>summarise()</code>)</li>
+<li><code>sample_n()</code> and <code>sample_frac()</code></li>
+</ul>
+
+<p>What do you think each of the above do?</p>
+
+<ul>
+<li>Good overview of <code>dplyr</code> <a href="https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html">here</a>.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-43" style="background:;">
+  <article data-timings="">
+    <p>We can take the previous example further, by piping the output into a plot</p>
+
+<pre><code class="r">td %&gt;% 
+  group_by(item, gender) %&gt;% 
+  summarize(prop = mean(score)) %&gt;% 
+  mutate(gender = as.factor(gender)) %&gt;% 
+  ggplot(aes(x = item, y = prop, color = gender)) +
+  geom_point() +
+  geom_line(aes(group = item))
+</code></pre>
+
+<p><img src="assets/fig/prop_correct_by_gender_plot-1.png" alt="plot of chunk prop_correct_by_gender_plot"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-44" style="background:;">
+  <article data-timings="">
+    <p>But, probably better (clearer) to do it in two steps. 
+<br></p>
+
+<p>First produce the data</p>
+
+<pre><code class="r">pd &lt;- td %&gt;% 
+  group_by(item, gender) %&gt;% 
+  summarize(prop = mean(score)) %&gt;% 
+  mutate(gender = as.factor(gender))
+</code></pre>
+
+<p>Then produce the plot</p>
+
+<pre><code class="r">ggplot(pd, aes(x = item, y = prop, color = gender)) +
+  geom_point() +
+  geom_line(aes(group = item))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-45" style="background:;">
+  <hgroup>
+    <h2>Note on plotting</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The entire next lecture will be on plotting. We&#39;re discussing tidy data now because it&#39;s a great format for plotting with <em>ggplot2</em>. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-46" style="background:;">
+  <hgroup>
+    <h2>Challenge (work by yourself or with a neighbor)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Remember, the following code calculates the mean score for each item. </p>
+
+<pre><code class="r">td %&gt;% 
+  group_by(item) %&gt;% 
+  summarize(prop = mean(score))
+</code></pre>
+
+<p>Try to modify the above code to produce raw scores for every student. If you&#39;re successful, try thinking about how you could calculate the average raw score by gender.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-47" style="background:;">
+  <hgroup>
+    <h2>Calculate Raw Scores</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Modify the prior to:</p>
+
+<ul>
+<li><code>group_by</code> student name</li>
+<li><code>sum</code> score (rather than average it with <code>mean</code>)</li>
+</ul>
+
+<pre><code class="r">td %&gt;% 
+  group_by(stu_name) %&gt;% 
+  summarize(raw_score = sum(score))
+</code></pre>
+
+<pre><code>## # A tibble: 35 × 2
+##    stu_name raw_score
+##       &lt;chr&gt;     &lt;int&gt;
+## 1      Adam         7
+## 2      Anne        10
+## 3    Audrey        11
+## 4   Barbara         6
+## 5      Bert         8
+## 6     Betty         9
+## 7    Blaise        13
+## 8    Brenda        10
+## 9   Britton         8
+## 10    Carol         6
+## # ... with 25 more rows
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-48" style="background:;">
+  <hgroup>
+    <h2>Raw Scores by Gender</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>group_by</code> name and gender (so gender is in the summary)</li>
+<li>calculate raw scores</li>
+<li>redefine <code>group_by</code> to gender alone</li>
+<li>calculate mean</li>
+</ul>
+
+<pre><code class="r">td %&gt;% 
+  group_by(stu_name, gender) %&gt;% 
+  summarize(raw_score = sum(score)) %&gt;% 
+  group_by(gender) %&gt;% 
+  summarize(means = mean(raw_score))
+</code></pre>
+
+<pre><code>## # A tibble: 2 × 2
+##   gender     means
+##    &lt;chr&gt;     &lt;dbl&gt;
+## 1      F  9.444444
+## 2      M 10.058824
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-49" style="background:;">
+  <hgroup>
+    <h2>Point-biserial correlation</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The point-biserial correlation represents the correlation between an item response (0/1) and the total score. It represents an index of item discrimination, because generally students&#39; responding correctly should have higher raw scores than students responding incorrectly.</p>
+
+<p><br>
+To calculate point biserial correlations, we need to </p>
+
+<ul>
+<li>merge the raw scores into the raw data</li>
+<li>calculate the correlation between the item <em>score</em> and <em>raw_score</em> for each item</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-50" style="background:;">
+  <hgroup>
+    <h2>Calculate raw scores and merge</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Raw score calculation</p>
+
+<pre><code class="r">raw &lt;- td %&gt;% 
+  group_by(stu_name) %&gt;% 
+  summarize(raw_score = sum(score))
+</code></pre>
+
+<p>Merge with <code>td</code></p>
+
+<pre><code class="r">td &lt;- left_join(td, raw)
+</code></pre>
+
+<pre><code>## Joining, by = &quot;stu_name&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-51" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">filter(td, stu_name == &quot;Barbara&quot;)
+</code></pre>
+
+<pre><code>## # A tibble: 18 × 5
+##    stu_name gender  item score raw_score
+##       &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;int&gt;     &lt;int&gt;
+## 1   Barbara      F     1     1         6
+## 2   Barbara      F     2     1         6
+## 3   Barbara      F     3     1         6
+## 4   Barbara      F     4     1         6
+## 5   Barbara      F     5     0         6
+## 6   Barbara      F     6     0         6
+## 7   Barbara      F     7     1         6
+## 8   Barbara      F     8     0         6
+## 9   Barbara      F     9     0         6
+## 10  Barbara      F    10     1         6
+## 11  Barbara      F    11     0         6
+## 12  Barbara      F    12     0         6
+## 13  Barbara      F    13     0         6
+## 14  Barbara      F    14     0         6
+## 15  Barbara      F    15     0         6
+## 16  Barbara      F    16     0         6
+## 17  Barbara      F    17     0         6
+## 18  Barbara      F    18     0         6
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-52" style="background:;">
+  <hgroup>
+    <h2>Calculate Point-Biserials</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>(note, you get some warnings here about no variance)</p>
+
+<pre><code class="r">td %&gt;% 
+  group_by(item) %&gt;% 
+  summarize(pt_biserial = cor(score, raw_score))
+</code></pre>
+
+<pre><code>## # A tibble: 18 × 2
+##     item pt_biserial
+##    &lt;chr&gt;       &lt;dbl&gt;
+## 1      1          NA
+## 2     10   0.6046692
+## 3     11   0.5381468
+## 4     12   0.4031706
+## 5     13   0.5693729
+## 6     14   0.2064809
+## 7     15   0.3095606
+## 8     16   0.3095606
+## 9     17   0.3095606
+## 10    18          NA
+## 11     2          NA
+## 12     3          NA
+## 13     4   0.5724589
+## 14     5   0.5700584
+## 15     6   0.5440214
+## 16     7   0.4177527
+## 17     8   0.7484416
+## 18     9   0.7171191
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-53" style="background:;">
+  <hgroup>
+    <h2>Spreading the data back out</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Tidy data is great when conducting preliminary descriptives and for plotting the data. But if you&#39;re using other packages for analysis, it may need to be in a different format. </p>
+
+<p><img src="assets/img/spread.png" alt="spread"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-54" style="background:;">
+  <hgroup>
+    <h2>Spread <em>td</em></h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">s_d &lt;- td %&gt;% 
+  spread(item, score)
+</code></pre>
+
+<p>(print object to see data)</p>
+
+<table><thead>
+<tr>
+<th align="left">stu_name</th>
+<th align="left">gender</th>
+<th align="right">raw_score</th>
+<th align="right">1</th>
+<th align="right">10</th>
+<th align="right">11</th>
+<th align="right">12</th>
+<th align="right">13</th>
+<th align="right">14</th>
+<th align="right">15</th>
+<th align="right">16</th>
+<th align="right">17</th>
+<th align="right">18</th>
+<th align="right">2</th>
+<th align="right">3</th>
+<th align="right">4</th>
+<th align="right">5</th>
+<th align="right">6</th>
+<th align="right">7</th>
+<th align="right">8</th>
+<th align="right">9</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Adam</td>
+<td align="left">M</td>
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Anne</td>
+<td align="left">F</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Audrey</td>
+<td align="left">F</td>
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Barbara</td>
+<td align="left">F</td>
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Bert</td>
+<td align="left">M</td>
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">Betty</td>
+<td align="left">F</td>
+<td align="right">9</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-55" style="background:;">
+  <hgroup>
+    <h2>Fit model</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>We&#39;ll fit a 1PL IRT model.</p>
+
+<ul>
+<li><code>ltm</code> package</li>
+<li><code>rasch</code> function requires only item response data, with each column representing a unique item.</li>
+</ul>
+
+<pre><code class="r">md &lt;- s_d %&gt;% 
+  select(-1:-3)
+
+# install.packages(&quot;ltm&quot;)
+library(ltm)
+model &lt;- rasch(md)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-56" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">summary(model)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## rasch(data = md)
+## 
+## Model Summary:
+##    log.Lik      AIC      BIC
+##  -156.3639 350.7277 380.2793
+## 
+## Coefficients:
+##              value    std.err  z.vals
+## Dffclt.1  -14.0580 12394.5102 -0.0011
+## Dffclt.10  -0.6312     0.3161 -1.9971
+## Dffclt.11   0.5733     0.3035  1.8886
+## Dffclt.12   1.3009     0.3802  3.4217
+## Dffclt.13   1.1568     0.3601  3.2128
+## Dffclt.14   1.8738     0.4872  3.8457
+## Dffclt.15   2.6305     0.7249  3.6288
+## Dffclt.16   2.6305     0.7249  3.6288
+## Dffclt.17   2.6305     0.7249  3.6288
+## Dffclt.18  14.0580 16371.2499  0.0009
+## Dffclt.2  -14.0580 12394.5102 -0.0011
+## Dffclt.3  -14.0580 12394.5102 -0.0011
+## Dffclt.4   -1.9363     0.5052 -3.8327
+## Dffclt.5   -1.6854     0.4542 -3.7108
+## Dffclt.6   -1.4794     0.4181 -3.5383
+## Dffclt.7   -1.6854     0.4542 -3.7108
+## Dffclt.8   -1.0019     0.3521 -2.8458
+## Dffclt.9   -1.4798     0.4182 -3.5387
+## Dscrmn      1.8186     0.3370  5.3960
+## 
+## Integration:
+## method: Gauss-Hermite
+## quadrature points: 21 
+## 
+## Optimization:
+## Convergence: 0 
+## max(|grad|): 0.002 
+## quasi-Newton: BFGS
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-57" style="background:;">
+  <hgroup>
+    <h2>One last note</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>For many models, you can get tidy output using the <em>broom</em> package (part of the <em>tidyverse</em>)</p>
+
+<pre><code class="r">lmd &lt;- td %&gt;% 
+  distinct(stu_name, .keep_all = TRUE) %&gt;% 
+  mutate(gender = as.factor(gender))
+
+mod &lt;- lm(raw_score ~ gender, data = lmd)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-58" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">library(broom)
+tidy(mod, conf.int = TRUE)
+</code></pre>
+
+<pre><code>##          term  estimate std.error statistic      p.value  conf.low
+## 1 (Intercept) 9.4444444 0.5676249 16.638531 1.300394e-17  8.289603
+## 2     genderM 0.6143791 0.8144623  0.754337 4.559964e-01 -1.042657
+##   conf.high
+## 1 10.599286
+## 2  2.271415
+</code></pre>
+
+<pre><code class="r">glance(mod)
+</code></pre>
+
+<pre><code>##    r.squared adj.r.squared    sigma statistic   p.value df    logLik
+## 1 0.01695088   -0.01283849 2.408228 0.5690244 0.4559964  2 -79.39434
+##        AIC      BIC deviance df.residual
+## 1 164.7887 169.4547 191.3856          33
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-59" style="background:;">
+  <article data-timings="">
+    <p>Broom is particularly useful for things like plotting. The below code will work for any linear model (with any number of predictors)</p>
+
+<pre><code class="r">tidy_mod &lt;- tidy(mod, conf.int = TRUE)
+ggplot(tidy_mod, aes(estimate, term, color = term)) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
+    geom_vline(xintercept = 0)
+</code></pre>
+
+<p><img src="assets/fig/broom_plot-1.png" alt="plot of chunk broom_plot"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-60" style="background:;">
+  <hgroup>
+    <h1>Lab</h1>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-61" style="background:;">
+  <hgroup>
+    <h2><em>iris</em> data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Already available to you as soon as you launch R. </p>
+
+<pre><code class="r">data(iris)
+head(iris)
+str(iris)
+summary(iris)
+View(iris)
+</code></pre>
+
+<table><thead>
+<tr>
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="left">Species</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr>
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr>
+<td align="right">4.7</td>
+<td align="right">3.2</td>
+<td align="right">1.3</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr>
+<td align="right">4.6</td>
+<td align="right">3.1</td>
+<td align="right">1.5</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr>
+<td align="right">5.0</td>
+<td align="right">3.6</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr>
+<td align="right">5.4</td>
+<td align="right">3.9</td>
+<td align="right">1.7</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-62" style="background:;">
+  <hgroup>
+    <h2>Work with a neighbor to</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Identify the variables (not the column names, the variables)</li>
+<li>Sketch how these data would look  in a tidy form (at least mentally)</li>
+<li>What would be the first step in tidying these data? (use <code>View(iris)</code> to see the full dataset easier). </li>
+</ul>
+
+<p>Work with a partner to try to conduct the first step in tidying the data</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-63" style="background:;">
+  <hgroup>
+    <h2>Step 1: Gather the sepal and petal columns</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">iris %&gt;% 
+  tbl_df() %&gt;% 
+  gather(flower_part, measurement, -Species)
+</code></pre>
+
+<pre><code>## # A tibble: 600 × 3
+##    Species  flower_part measurement
+##     &lt;fctr&gt;        &lt;chr&gt;       &lt;dbl&gt;
+## 1   setosa Sepal.Length         5.1
+## 2   setosa Sepal.Length         4.9
+## 3   setosa Sepal.Length         4.7
+## 4   setosa Sepal.Length         4.6
+## 5   setosa Sepal.Length         5.0
+## 6   setosa Sepal.Length         5.4
+## 7   setosa Sepal.Length         4.6
+## 8   setosa Sepal.Length         5.0
+## 9   setosa Sepal.Length         4.4
+## 10  setosa Sepal.Length         4.9
+## # ... with 590 more rows
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-64" style="background:;">
+  <hgroup>
+    <h2>iris data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>What needs to happen next? Are the data tidy?</p>
+
+<ul class = "build incremental">
+<li>Work with a partner to figure out the next step, and try to do it.
+
+<ul>
+<li><em>Hint:</em> Use <code>&quot;\\.&quot;</code> as your separator rather than just <code>&quot;.&quot;</code>. I&#39;ll explain why momentarily.</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-65" style="background:;">
+  <hgroup>
+    <h2>Step 2: Separate the flower_part column</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">iris %&gt;% 
+  tbl_df() %&gt;% 
+  gather(flower_part, measurement, -Species) %&gt;% 
+  separate(flower_part, c(&quot;flower_part&quot;, &quot;measure_of&quot;), sep = &quot;\\.&quot;)
+</code></pre>
+
+<pre><code>## # A tibble: 600 × 4
+##    Species flower_part measure_of measurement
+## *   &lt;fctr&gt;       &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
+## 1   setosa       Sepal     Length         5.1
+## 2   setosa       Sepal     Length         4.9
+## 3   setosa       Sepal     Length         4.7
+## 4   setosa       Sepal     Length         4.6
+## 5   setosa       Sepal     Length         5.0
+## 6   setosa       Sepal     Length         5.4
+## 7   setosa       Sepal     Length         4.6
+## 8   setosa       Sepal     Length         5.0
+## 9   setosa       Sepal     Length         4.4
+## 10  setosa       Sepal     Length         4.9
+## # ... with 590 more rows
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-66" style="background:;">
+  <hgroup>
+    <h2>iris data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>What needs to happen next? Are the data tidy?</p>
+
+<ul class = "build incremental">
+<li>Nothing! They are tidy! Just need to store them in an object.</li>
+<li>Now... Calculate the average Sepal Width by Species.</li>
+<li>Explore the data in a few other ways of your choosing.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-67" style="background:;">
+  <hgroup>
+    <h2>Some descriptives</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">iris_tidy &lt;- iris %&gt;% 
+  tbl_df() %&gt;% 
+  gather(flower_part, measurement, -Species) %&gt;% 
+  separate(flower_part, c(&quot;flower_part&quot;, &quot;measure_of&quot;), sep = &quot;\\.&quot;)
+
+iris_tidy %&gt;% 
+  group_by(Species, measure_of) %&gt;% 
+  summarize(mean = mean(measurement)) %&gt;% 
+  filter(measure_of == &quot;Width&quot;)
+</code></pre>
+
+<pre><code>## Source: local data frame [3 x 3]
+## Groups: Species [3]
+## 
+##      Species measure_of  mean
+##       &lt;fctr&gt;      &lt;chr&gt; &lt;dbl&gt;
+## 1     setosa      Width 1.837
+## 2 versicolor      Width 2.048
+## 3  virginica      Width 2.500
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-68" style="background:;">
+  <hgroup>
+    <h2>Some more descriptives</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">iris_tidy %&gt;% 
+  group_by(Species, flower_part, measure_of) %&gt;% 
+  summarize(mean = mean(measurement), 
+            standard_dev = sd(measurement),
+            iqr = IQR(measurement))
+</code></pre>
+
+<pre><code>## Source: local data frame [12 x 6]
+## Groups: Species, flower_part [?]
+## 
+##       Species flower_part measure_of  mean standard_dev   iqr
+##        &lt;fctr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
+## 1      setosa       Petal     Length 1.462    0.1736640 0.175
+## 2      setosa       Petal      Width 0.246    0.1053856 0.100
+## 3      setosa       Sepal     Length 5.006    0.3524897 0.400
+## 4      setosa       Sepal      Width 3.428    0.3790644 0.475
+## 5  versicolor       Petal     Length 4.260    0.4699110 0.600
+## 6  versicolor       Petal      Width 1.326    0.1977527 0.300
+## 7  versicolor       Sepal     Length 5.936    0.5161711 0.700
+## 8  versicolor       Sepal      Width 2.770    0.3137983 0.475
+## 9   virginica       Petal     Length 5.552    0.5518947 0.775
+## 10  virginica       Petal      Width 2.026    0.2746501 0.500
+## 11  virginica       Sepal     Length 6.588    0.6358796 0.675
+## 12  virginica       Sepal      Width 2.974    0.3224966 0.375
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='tidyverse (briefly)'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='tidyverse packages'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Other tidyverse packages'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='<code>tidyr</code> and <code>dplyr</code>'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Getting started'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Important qualifications'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Why tidyverse?'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Philosophy of the tidyverse'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Tidy data'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='NA'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='NA'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Tidy data'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Common ways rectangular datasets are &quot;messy&quot;'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='An example with SEDA data'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='NA'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Tidied version'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Other examples'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='The tidied version'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Yet another example'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Step one'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Step two: Tidied data'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Variables as rows and columns'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Two Steps'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='A caveat'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='The tidyverse data analysis philosophy'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Why tidy data?'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Load the data'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Load data with RStudio demo'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Other ways to load data'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Pop Quiz Time'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Verbs: <code>tidyr</code>'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Quick aside: <code>%&gt;%</code>'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='Step 1: <code>gather</code> the item variables'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='NA'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='NA'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Finish tidying the data'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='An alternative'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Why are tidy data useful?'>
+         39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='NA'>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='NA'>
+         41
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='Verbs: <em>dplyr</em>'>
+         42
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title='NA'>
+         43
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title='NA'>
+         44
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='Note on plotting'>
+         45
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title='Challenge (work by yourself or with a neighbor)'>
+         46
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=47 title='Calculate Raw Scores'>
+         47
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=48 title='Raw Scores by Gender'>
+         48
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=49 title='Point-biserial correlation'>
+         49
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=50 title='Calculate raw scores and merge'>
+         50
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=51 title='NA'>
+         51
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=52 title='Calculate Point-Biserials'>
+         52
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=53 title='Spreading the data back out'>
+         53
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=54 title='Spread <em>td</em>'>
+         54
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=55 title='Fit model'>
+         55
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=56 title='NA'>
+         56
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=57 title='One last note'>
+         57
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=58 title='NA'>
+         58
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=59 title='NA'>
+         59
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=60 title='Lab'>
+         60
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=61 title='<em>iris</em> data'>
+         61
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=62 title='Work with a neighbor to'>
+         62
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=63 title='Step 1: Gather the sepal and petal columns'>
+         63
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=64 title='iris data'>
+         64
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=65 title='Step 2: Separate the flower_part column'>
+         65
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=66 title='iris data'>
+         66
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=67 title='Some descriptives'>
+         67
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=68 title='Some more descriptives'>
+         68
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
