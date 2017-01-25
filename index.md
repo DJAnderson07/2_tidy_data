@@ -166,7 +166,7 @@ We will learn some base R - it is unavoidable. A *huge* part of learning R is le
 *** =right
 
 <div align = "center">
-<img src = assets/img/hadley_jss.png width = 500 height = 750>
+<img src = assets/img/hadley_JSS.png width = 500 height = 750>
 </div>
 
 ---- 
