@@ -33,7 +33,7 @@
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
     <h1>An introduction to tidy data and the tidyverse</h1>
-    <h2></h2>
+    <h2>Lecture 2: Taste of R Workshop, UO COE</h2>
     <p>Daniel Anderson<br/></p>
   </hgroup>
   <article></article>  
@@ -60,9 +60,10 @@ strong {
 <ul>
 <li>Introduce the tidyverse</li>
 <li>Introduce the concept of tidy data</li>
-<li>Tidy a simple dataset together</li>
-<li>Discuss why tidy data are useful (particularly when used within the tidyverse)</li>
-<li>Overview packages in the tidyverse</li>
+<li>Tidy a simple dataset together with <code>tidyr</code></li>
+<li>Summarize and transform tidy data with <code>dplyr</code></li>
+<li>Fit a few models and look at some extensions (the <code>broom</code> package)</li>
+<li>Lab (which we probably won&#39;t get to, but you can work on it on your own later if you want)</li>
 </ul>
 
   </article>
@@ -1650,20 +1651,6 @@ library(tidyverse)
 
 <slide class="" id="slide-27" style="background:;">
   <hgroup>
-    <h2>Why tidy data?</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
-<li><p>When you put your data in a tidy format they are &quot;ready to go&quot; for essentially all the packages in the tidyverse. Let&#39;s look at some example item-level data.</p></li>
-<li><p>First, let&#39;s tidy some data together, as a group. Then, I&#39;ll demonstrate why this format can be so helpful within the tidyverse</p></li>
-</ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-28" style="background:;">
-  <hgroup>
     <h2>Load the data</h2>
   </hgroup>
   <article data-timings="">
@@ -1677,7 +1664,7 @@ library(tidyverse)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-29" style="background:;">
+<slide class="segue" id="slide-28" style="background:;">
   <hgroup>
     <h1>Load data with RStudio demo</h1>
   </hgroup>
@@ -1687,7 +1674,7 @@ library(tidyverse)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-30" style="background:;">
+<slide class="" id="slide-29" style="background:;">
   <hgroup>
     <h2>Other ways to load data</h2>
   </hgroup>
@@ -1860,7 +1847,7 @@ knitr::kable(head(d))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-31" style="background:;">
+<slide class="" id="slide-30" style="background:;">
   <hgroup>
     <h2>Pop Quiz Time</h2>
   </hgroup>
@@ -1875,7 +1862,7 @@ knitr::kable(head(d))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-32" style="background:;">
+<slide class="" id="slide-31" style="background:;">
   <hgroup>
     <h2>Verbs: <code>tidyr</code></h2>
   </hgroup>
@@ -1894,7 +1881,7 @@ knitr::kable(head(d))
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-33" style="background:;">
+<slide class="" id="slide-32" style="background:;">
   <hgroup>
     <h2>Quick aside: <code>%&gt;%</code></h2>
   </hgroup>
@@ -1940,7 +1927,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-34" style="background:;">
+<slide class="" id="slide-33" style="background:;">
   <hgroup>
     <h2>Step 1: <code>gather</code> the item variables</h2>
   </hgroup>
@@ -1957,7 +1944,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-35" style="background:;">
+<slide class="" id="slide-34" style="background:;">
   <article data-timings="">
     <p>Try running the following code</p>
 
@@ -1978,7 +1965,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-36" style="background:;">
+<slide class="" id="slide-35" style="background:;">
   <article data-timings="">
     <ul>
 <li>The code on the previous slide basically puts our data in a tidy format. </li>
@@ -1996,7 +1983,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-37" style="background:;">
+<slide class="" id="slide-36" style="background:;">
   <hgroup>
     <h2>Finish tidying the data</h2>
   </hgroup>
@@ -2061,7 +2048,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-38" style="background:;">
+<slide class="" id="slide-37" style="background:;">
   <hgroup>
     <h2>An alternative</h2>
   </hgroup>
@@ -2078,7 +2065,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-39" style="background:;">
+<slide class="" id="slide-38" style="background:;">
   <hgroup>
     <h2>Why are tidy data useful?</h2>
   </hgroup>
@@ -2098,7 +2085,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-40" style="background:;">
+<slide class="" id="slide-39" style="background:;">
   <article data-timings="">
     <pre><code>## # A tibble: 18 × 2
 ##     item       prop
@@ -2127,7 +2114,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-41" style="background:;">
+<slide class="" id="slide-40" style="background:;">
   <article data-timings="">
     <p>What if we also wanted to know the standard deviation?</p>
 
@@ -2191,7 +2178,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-42" style="background:;">
+<slide class="" id="slide-41" style="background:;">
   <hgroup>
     <h2>Verbs: <em>dplyr</em></h2>
   </hgroup>
@@ -2217,7 +2204,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-43" style="background:;">
+<slide class="" id="slide-42" style="background:;">
   <article data-timings="">
     <p>We can take the previous example further, by piping the output into a plot</p>
 
@@ -2236,7 +2223,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-44" style="background:;">
+<slide class="" id="slide-43" style="background:;">
   <article data-timings="">
     <p>But, probably better (clearer) to do it in two steps. 
 <br></p>
@@ -2260,7 +2247,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-45" style="background:;">
+<slide class="" id="slide-44" style="background:;">
   <hgroup>
     <h2>Note on plotting</h2>
   </hgroup>
@@ -2271,7 +2258,7 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-46" style="background:;">
+<slide class="" id="slide-45" style="background:;">
   <hgroup>
     <h2>Challenge (work by yourself or with a neighbor)</h2>
   </hgroup>
@@ -2283,21 +2270,24 @@ next. For example:</p>
   summarize(prop = mean(score))
 </code></pre>
 
-<p>Try to modify the above code to produce raw scores for every student. If you&#39;re successful, try thinking about how you could calculate the average raw score by gender.</p>
+<ul>
+<li>Try to modify the above code to produce raw scores for every student. </li>
+<li>If you&#39;re successful, try to also calculate the percent correct.</li>
+</ul>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-47" style="background:;">
+<slide class="" id="slide-46" style="background:;">
   <hgroup>
     <h2>Calculate Raw Scores</h2>
   </hgroup>
   <article data-timings="">
-    <p>Modify the prior to:</p>
+    <p>Modify the prior code to:</p>
 
 <ul>
-<li><code>group_by</code> student name</li>
+<li><code>group_by</code> <em>stu_name</em> (rather than <em>item</em>)</li>
 <li><code>sum</code> score (rather than average it with <code>mean</code>)</li>
 </ul>
 
@@ -2326,37 +2316,42 @@ next. For example:</p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-48" style="background:;">
+<slide class="" id="slide-47" style="background:;">
   <hgroup>
-    <h2>Raw Scores by Gender</h2>
+    <h2>Calculate percent correct</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li><code>group_by</code> name and gender (so gender is in the summary)</li>
-<li>calculate raw scores</li>
-<li>redefine <code>group_by</code> to gender alone</li>
-<li>calculate mean</li>
-</ul>
+    <p>(many correct answers, this is just one)</p>
 
-<pre><code class="r">td %&gt;% 
-  group_by(stu_name, gender) %&gt;% 
-  summarize(raw_score = sum(score)) %&gt;% 
-  group_by(gender) %&gt;% 
-  summarize(means = mean(raw_score))
+<pre><code class="r">total_poss &lt;- 18
+
+td %&gt;% 
+  group_by(stu_name) %&gt;% 
+  summarize(raw_score = sum(score),
+            pct_correct = raw_score / total_poss)
 </code></pre>
 
-<pre><code>## # A tibble: 2 × 2
-##   gender     means
-##    &lt;chr&gt;     &lt;dbl&gt;
-## 1      F  9.444444
-## 2      M 10.058824
+<pre><code>## # A tibble: 35 × 3
+##    stu_name raw_score pct_correct
+##       &lt;chr&gt;     &lt;int&gt;       &lt;dbl&gt;
+## 1      Adam         7   0.3888889
+## 2      Anne        10   0.5555556
+## 3    Audrey        11   0.6111111
+## 4   Barbara         6   0.3333333
+## 5      Bert         8   0.4444444
+## 6     Betty         9   0.5000000
+## 7    Blaise        13   0.7222222
+## 8    Brenda        10   0.5555556
+## 9   Britton         8   0.4444444
+## 10    Carol         6   0.3333333
+## # ... with 25 more rows
 </code></pre>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-49" style="background:;">
+<slide class="" id="slide-48" style="background:;">
   <hgroup>
     <h2>Point-biserial correlation</h2>
   </hgroup>
@@ -2375,7 +2370,7 @@ To calculate point biserial correlations, we need to </p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-50" style="background:;">
+<slide class="" id="slide-49" style="background:;">
   <hgroup>
     <h2>Calculate raw scores and merge</h2>
   </hgroup>
@@ -2399,7 +2394,7 @@ To calculate point biserial correlations, we need to </p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-51" style="background:;">
+<slide class="" id="slide-50" style="background:;">
   <article data-timings="">
     <pre><code class="r">filter(td, stu_name == &quot;Barbara&quot;)
 </code></pre>
@@ -2431,7 +2426,7 @@ To calculate point biserial correlations, we need to </p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-52" style="background:;">
+<slide class="" id="slide-51" style="background:;">
   <hgroup>
     <h2>Calculate Point-Biserials</h2>
   </hgroup>
@@ -2470,7 +2465,7 @@ To calculate point biserial correlations, we need to </p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-53" style="background:;">
+<slide class="" id="slide-52" style="background:;">
   <hgroup>
     <h2>Spreading the data back out</h2>
   </hgroup>
@@ -2483,12 +2478,46 @@ To calculate point biserial correlations, we need to </p>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-54" style="background:;">
+<slide class="" id="slide-53" style="background:;">
   <hgroup>
     <h2>Spread <em>td</em></h2>
   </hgroup>
   <article data-timings="">
-    <pre><code class="r">s_d &lt;- td %&gt;% 
+    <p>Reminder what the tidy data look like</p>
+
+<table><thead>
+<tr>
+<th align="left">stu_name</th>
+<th align="left">gender</th>
+<th align="left">item</th>
+<th align="right">score</th>
+<th align="right">raw_score</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Adam</td>
+<td align="left">M</td>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">7</td>
+</tr>
+<tr>
+<td align="left">Anne</td>
+<td align="left">F</td>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">10</td>
+</tr>
+<tr>
+<td align="left">Audrey</td>
+<td align="left">F</td>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">11</td>
+</tr>
+</tbody></table>
+
+<pre><code class="r">s_d &lt;- td %&gt;% 
   spread(item, score)
 </code></pre>
 
@@ -2588,82 +2617,13 @@ To calculate point biserial correlations, we need to </p>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
-<tr>
-<td align="left">Barbara</td>
-<td align="left">F</td>
-<td align="right">6</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr>
-<td align="left">Bert</td>
-<td align="left">M</td>
-<td align="right">8</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr>
-<td align="left">Betty</td>
-<td align="left">F</td>
-<td align="right">9</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
 </tbody></table>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-55" style="background:;">
+<slide class="" id="slide-54" style="background:;">
   <hgroup>
     <h2>Fit model</h2>
   </hgroup>
@@ -2687,7 +2647,7 @@ model &lt;- rasch(md)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-56" style="background:;">
+<slide class="" id="slide-55" style="background:;">
   <article data-timings="">
     <pre><code class="r">summary(model)
 </code></pre>
@@ -2736,7 +2696,7 @@ model &lt;- rasch(md)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-57" style="background:;">
+<slide class="" id="slide-56" style="background:;">
   <hgroup>
     <h2>One last note</h2>
   </hgroup>
@@ -2748,13 +2708,23 @@ model &lt;- rasch(md)
   mutate(gender = as.factor(gender))
 
 mod &lt;- lm(raw_score ~ gender, data = lmd)
+arm::display(mod, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = raw_score ~ gender, data = lmd)
+##             coef.est coef.se t value Pr(&gt;|t|)
+## (Intercept)  9.44     0.57   16.64    0.00   
+## genderM      0.61     0.81    0.75    0.46   
+## ---
+## n = 35, k = 2
+## residual sd = 2.41, R-Squared = 0.02
 </code></pre>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-58" style="background:;">
+<slide class="" id="slide-57" style="background:;">
   <article data-timings="">
     <pre><code class="r">library(broom)
 tidy(mod, conf.int = TRUE)
@@ -2781,7 +2751,7 @@ tidy(mod, conf.int = TRUE)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-59" style="background:;">
+<slide class="" id="slide-58" style="background:;">
   <article data-timings="">
     <p>Broom is particularly useful for things like plotting. The below code will work for any linear model (with any number of predictors)</p>
 
@@ -2797,7 +2767,7 @@ ggplot(tidy_mod, aes(estimate, term, color = term)) +
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-60" style="background:;">
+<slide class="segue" id="slide-59" style="background:;">
   <hgroup>
     <h1>Lab</h1>
   </hgroup>
@@ -2807,7 +2777,7 @@ ggplot(tidy_mod, aes(estimate, term, color = term)) +
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-61" style="background:;">
+<slide class="" id="slide-60" style="background:;">
   <hgroup>
     <h2><em>iris</em> data</h2>
   </hgroup>
@@ -2878,7 +2848,7 @@ View(iris)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-62" style="background:;">
+<slide class="" id="slide-61" style="background:;">
   <hgroup>
     <h2>Work with a neighbor to</h2>
   </hgroup>
@@ -2895,7 +2865,7 @@ View(iris)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-63" style="background:;">
+<slide class="" id="slide-62" style="background:;">
   <hgroup>
     <h2>Step 1: Gather the sepal and petal columns</h2>
   </hgroup>
@@ -2925,7 +2895,7 @@ View(iris)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-64" style="background:;">
+<slide class="" id="slide-63" style="background:;">
   <hgroup>
     <h2>iris data</h2>
   </hgroup>
@@ -2944,7 +2914,7 @@ View(iris)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-65" style="background:;">
+<slide class="" id="slide-64" style="background:;">
   <hgroup>
     <h2>Step 2: Separate the flower_part column</h2>
   </hgroup>
@@ -2975,7 +2945,7 @@ View(iris)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-66" style="background:;">
+<slide class="" id="slide-65" style="background:;">
   <hgroup>
     <h2>iris data</h2>
   </hgroup>
@@ -2992,7 +2962,7 @@ View(iris)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-67" style="background:;">
+<slide class="" id="slide-66" style="background:;">
   <hgroup>
     <h2>Some descriptives</h2>
   </hgroup>
@@ -3022,7 +2992,7 @@ iris_tidy %&gt;%
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-68" style="background:;">
+<slide class="" id="slide-67" style="background:;">
   <hgroup>
     <h2>Some more descriptives</h2>
   </hgroup>
@@ -3219,49 +3189,49 @@ iris_tidy %&gt;%
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='Why tidy data?'>
+        data-slide=27 title='Load the data'>
          27
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Load the data'>
+        data-slide=28 title='Load data with RStudio demo'>
          28
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='Load data with RStudio demo'>
+        data-slide=29 title='Other ways to load data'>
          29
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='Other ways to load data'>
+        data-slide=30 title='Pop Quiz Time'>
          30
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='Pop Quiz Time'>
+        data-slide=31 title='Verbs: <code>tidyr</code>'>
          31
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Verbs: <code>tidyr</code>'>
+        data-slide=32 title='Quick aside: <code>%&gt;%</code>'>
          32
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title='Quick aside: <code>%&gt;%</code>'>
+        data-slide=33 title='Step 1: <code>gather</code> the item variables'>
          33
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='Step 1: <code>gather</code> the item variables'>
+        data-slide=34 title='NA'>
          34
       </a>
     </li>
@@ -3273,25 +3243,25 @@ iris_tidy %&gt;%
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=36 title='NA'>
+        data-slide=36 title='Finish tidying the data'>
          36
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=37 title='Finish tidying the data'>
+        data-slide=37 title='An alternative'>
          37
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=38 title='An alternative'>
+        data-slide=38 title='Why are tidy data useful?'>
          38
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=39 title='Why are tidy data useful?'>
+        data-slide=39 title='NA'>
          39
       </a>
     </li>
@@ -3303,13 +3273,13 @@ iris_tidy %&gt;%
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=41 title='NA'>
+        data-slide=41 title='Verbs: <em>dplyr</em>'>
          41
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=42 title='Verbs: <em>dplyr</em>'>
+        data-slide=42 title='NA'>
          42
       </a>
     </li>
@@ -3321,85 +3291,85 @@ iris_tidy %&gt;%
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=44 title='NA'>
+        data-slide=44 title='Note on plotting'>
          44
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=45 title='Note on plotting'>
+        data-slide=45 title='Challenge (work by yourself or with a neighbor)'>
          45
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=46 title='Challenge (work by yourself or with a neighbor)'>
+        data-slide=46 title='Calculate Raw Scores'>
          46
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=47 title='Calculate Raw Scores'>
+        data-slide=47 title='Calculate percent correct'>
          47
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=48 title='Raw Scores by Gender'>
+        data-slide=48 title='Point-biserial correlation'>
          48
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=49 title='Point-biserial correlation'>
+        data-slide=49 title='Calculate raw scores and merge'>
          49
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=50 title='Calculate raw scores and merge'>
+        data-slide=50 title='NA'>
          50
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=51 title='NA'>
+        data-slide=51 title='Calculate Point-Biserials'>
          51
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=52 title='Calculate Point-Biserials'>
+        data-slide=52 title='Spreading the data back out'>
          52
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=53 title='Spreading the data back out'>
+        data-slide=53 title='Spread <em>td</em>'>
          53
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=54 title='Spread <em>td</em>'>
+        data-slide=54 title='Fit model'>
          54
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=55 title='Fit model'>
+        data-slide=55 title='NA'>
          55
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=56 title='NA'>
+        data-slide=56 title='One last note'>
          56
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=57 title='One last note'>
+        data-slide=57 title='NA'>
          57
       </a>
     </li>
@@ -3411,62 +3381,56 @@ iris_tidy %&gt;%
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=59 title='NA'>
+        data-slide=59 title='Lab'>
          59
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=60 title='Lab'>
+        data-slide=60 title='<em>iris</em> data'>
          60
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=61 title='<em>iris</em> data'>
+        data-slide=61 title='Work with a neighbor to'>
          61
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=62 title='Work with a neighbor to'>
+        data-slide=62 title='Step 1: Gather the sepal and petal columns'>
          62
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=63 title='Step 1: Gather the sepal and petal columns'>
+        data-slide=63 title='iris data'>
          63
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=64 title='iris data'>
+        data-slide=64 title='Step 2: Separate the flower_part column'>
          64
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=65 title='Step 2: Separate the flower_part column'>
+        data-slide=65 title='iris data'>
          65
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=66 title='iris data'>
+        data-slide=66 title='Some descriptives'>
          66
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=67 title='Some descriptives'>
+        data-slide=67 title='Some more descriptives'>
          67
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=68 title='Some more descriptives'>
-         68
       </a>
     </li>
   </ul>

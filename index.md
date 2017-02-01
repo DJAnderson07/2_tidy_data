@@ -1,6 +1,6 @@
 ---
 title       : An introduction to tidy data and the tidyverse
-subtitle    : 
+subtitle    : "Lecture 2: Taste of R Workshop, UO COE"
 author      : Daniel Anderson
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
@@ -27,9 +27,10 @@ strong {
 ## Agenda
 * Introduce the tidyverse
 * Introduce the concept of tidy data
-* Tidy a simple dataset together
-* Discuss why tidy data are useful (particularly when used within the tidyverse)
-* Overview packages in the tidyverse
+* Tidy a simple dataset together with `tidyr`
+* Summarize and transform tidy data with `dplyr`
+* Fit a few models and look at some extensions (the `broom` package)
+* Lab (which we probably won't get to, but you can work on it on your own later if you want)
 
 ---- &twocol
 ## tidyverse (briefly)
@@ -402,13 +403,6 @@ Notice this is much closer to what we want, but we have a problem now in that we
 
 
 ----
-## Why tidy data?
-
-* When you put your data in a tidy format they are "ready to go" for essentially all the packages in the tidyverse. Let's look at some example item-level data.
-
-* First, let's tidy some data together, as a group. Then, I'll demonstrate why this format can be so helpful within the tidyverse
-
-----
 ## Load the data
 
 Because we're working through the *tidyverse*, we'll use the *readr* package and the `read_csv` function, rather than `base::read.csv`. These functions differ in the following ways:
@@ -744,12 +738,13 @@ td %>%
   summarize(prop = mean(score))
 ```
 
-Try to modify the above code to produce raw scores for every student. If you're successful, try thinking about how you could calculate the average raw score by gender.
+* Try to modify the above code to produce raw scores for every student. 
+* If you're successful, try to also calculate the percent correct.
 
 ----
 ## Calculate Raw Scores
-Modify the prior to:
-* `group_by` student name
+Modify the prior code to:
+* `group_by` *stu_name* (rather than *item*)
 * `sum` score (rather than average it with `mean`)
 
 
@@ -777,27 +772,34 @@ td %>%
 ```
 
 ----
-## Raw Scores by Gender
-* `group_by` name and gender (so gender is in the summary)
-* calculate raw scores
-* redefine `group_by` to gender alone
-* calculate mean
+## Calculate percent correct
+(many correct answers, this is just one)
 
 
 ```r
+total_poss <- 18
+
 td %>% 
-  group_by(stu_name, gender) %>% 
-  summarize(raw_score = sum(score)) %>% 
-  group_by(gender) %>% 
-  summarize(means = mean(raw_score))
+  group_by(stu_name) %>% 
+  summarize(raw_score = sum(score),
+            pct_correct = raw_score / total_poss)
 ```
 
 ```
-## # A tibble: 2 × 2
-##   gender     means
-##    <chr>     <dbl>
-## 1      F  9.444444
-## 2      M 10.058824
+## # A tibble: 35 × 3
+##    stu_name raw_score pct_correct
+##       <chr>     <int>       <dbl>
+## 1      Adam         7   0.3888889
+## 2      Anne        10   0.5555556
+## 3    Audrey        11   0.6111111
+## 4   Barbara         6   0.3333333
+## 5      Bert         8   0.4444444
+## 6     Betty         9   0.5000000
+## 7    Blaise        13   0.7222222
+## 8    Brenda        10   0.5555556
+## 9   Britton         8   0.4444444
+## 10    Carol         6   0.3333333
+## # ... with 25 more rows
 ```
 
 ----
@@ -862,10 +864,10 @@ filter(td, stu_name == "Barbara")
 ## 18  Barbara      F    18     0         6
 ```
 
-
 ---
 ## Calculate Point-Biserials
 (note, you get some warnings here about no variance)
+
 
 ```r
 td %>% 
@@ -907,6 +909,15 @@ Tidy data is great when conducting preliminary descriptives and for plotting the
 ----
 ## Spread *td*
 
+Reminder what the tidy data look like
+
+
+|stu_name |gender |item | score| raw_score|
+|:--------|:------|:----|-----:|---------:|
+|Adam     |M      |1    |     1|         7|
+|Anne     |F      |1    |     1|        10|
+|Audrey   |F      |1    |     1|        11|
+
 
 ```r
 s_d <- td %>% 
@@ -920,9 +931,6 @@ s_d <- td %>%
 |Adam     |M      |         7|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  1|  1|  1|  1|  1|  0|  0|
 |Anne     |F      |        10|  1|  1|  0|  0|  0|  0|  0|  0|  0|  0|  1|  1|  1|  1|  1|  1|  1|  1|
 |Audrey   |F      |        11|  1|  1|  0|  0|  1|  0|  0|  0|  0|  0|  1|  1|  1|  1|  1|  1|  1|  1|
-|Barbara  |F      |         6|  1|  1|  0|  0|  0|  0|  0|  0|  0|  0|  1|  1|  1|  0|  0|  1|  0|  0|
-|Bert     |M      |         8|  1|  1|  0|  0|  0|  0|  0|  0|  0|  0|  1|  1|  1|  1|  0|  1|  0|  1|
-|Betty    |F      |         9|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  1|  1|  1|  1|  1|  1|  1|
 
 ----
 ## Fit model
@@ -998,6 +1006,17 @@ lmd <- td %>%
   mutate(gender = as.factor(gender))
 
 mod <- lm(raw_score ~ gender, data = lmd)
+arm::display(mod, detail = TRUE)
+```
+
+```
+## lm(formula = raw_score ~ gender, data = lmd)
+##             coef.est coef.se t value Pr(>|t|)
+## (Intercept)  9.44     0.57   16.64    0.00   
+## genderM      0.61     0.81    0.75    0.46   
+## ---
+## n = 35, k = 2
+## residual sd = 2.41, R-Squared = 0.02
 ```
 
 ----

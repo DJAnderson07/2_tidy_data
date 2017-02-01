@@ -1,6 +1,6 @@
 ---
 title       : An introduction to tidy data and the tidyverse
-subtitle    : 
+subtitle    : "Lecture 2: Taste of R Workshop, UO COE"
 author      : Daniel Anderson
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
@@ -31,9 +31,10 @@ library(stringr)
 ## Agenda
 * Introduce the tidyverse
 * Introduce the concept of tidy data
-* Tidy a simple dataset together
-* Discuss why tidy data are useful (particularly when used within the tidyverse)
-* Overview packages in the tidyverse
+* Tidy a simple dataset together with `tidyr`
+* Summarize and transform tidy data with `dplyr`
+* Fit a few models and look at some extensions (the `broom` package)
+* Lab (which we probably won't get to, but you can work on it on your own later if you want)
 
 ---- &twocol
 ## tidyverse (briefly)
@@ -416,13 +417,6 @@ kable(tidied_weather[1:10, ])
 
 
 ----
-## Why tidy data?
-
-* When you put your data in a tidy format they are "ready to go" for essentially all the packages in the tidyverse. Let's look at some example item-level data.
-
-* First, let's tidy some data together, as a group. Then, I'll demonstrate why this format can be so helpful within the tidyverse
-
-----
 ## Load the data
 
 Because we're working through the *tidyverse*, we'll use the *readr* package and the `read_csv` function, rather than `base::read.csv`. These functions differ in the following ways:
@@ -636,12 +630,13 @@ td %>%
   summarize(prop = mean(score))
 ```
 
-Try to modify the above code to produce raw scores for every student. If you're successful, try thinking about how you could calculate the average raw score by gender.
+* Try to modify the above code to produce raw scores for every student. 
+* If you're successful, try to also calculate the percent correct.
 
 ----
 ## Calculate Raw Scores
-Modify the prior to:
-* `group_by` student name
+Modify the prior code to:
+* `group_by` *stu_name* (rather than *item*)
 * `sum` score (rather than average it with `mean`)
 
 ```{r raw_scores}
@@ -651,18 +646,16 @@ td %>%
 ```
 
 ----
-## Raw Scores by Gender
-* `group_by` name and gender (so gender is in the summary)
-* calculate raw scores
-* redefine `group_by` to gender alone
-* calculate mean
+## Calculate percent correct
+(many correct answers, this is just one)
 
-```{r raw_scores_by_gender}
+```{r raw_scores_pct}
+total_poss <- 18
+
 td %>% 
-  group_by(stu_name, gender) %>% 
-  summarize(raw_score = sum(score)) %>% 
-  group_by(gender) %>% 
-  summarize(means = mean(raw_score))
+  group_by(stu_name) %>% 
+  summarize(raw_score = sum(score),
+            pct_correct = raw_score / total_poss)
 ```
 
 ----
@@ -694,13 +687,12 @@ td <- left_join(td, raw)
 ----
 ```{r filter_barbara}
 filter(td, stu_name == "Barbara")
-
 ```
-
 
 ---
 ## Calculate Point-Biserials
 (note, you get some warnings here about no variance)
+
 ```{r pt_biserials, warning = FALSE}
 td %>% 
   group_by(item) %>% 
@@ -717,6 +709,13 @@ Tidy data is great when conducting preliminary descriptives and for plotting the
 ----
 ## Spread *td*
 
+Reminder what the tidy data look like
+
+```{r td_reminder, echo = FALSE}
+knitr::kable(td[1:3, ])
+
+```
+
 ```{r spread_td}
 s_d <- td %>% 
   spread(item, score)
@@ -724,7 +723,7 @@ s_d <- td %>%
 (print object to see data)
 
 ```{r print_spread_data, echo = FALSE}
-knitr::kable(head(s_d))
+knitr::kable(s_d[1:3, ])
 ```
 
 ----
@@ -757,6 +756,7 @@ lmd <- td %>%
   mutate(gender = as.factor(gender))
 
 mod <- lm(raw_score ~ gender, data = lmd)
+arm::display(mod, detail = TRUE)
 ```
 
 ----
